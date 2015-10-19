@@ -66,7 +66,7 @@ var BulletVotes = BulletVotes || {};
       },
       tooltip: {
         format: {
-          title: function (x) { return x + '&nbsp;candidate' + (x != 1 ? 's' : ''); }
+          title: function(x) { return x + '&nbsp;candidate' + (x != 1 ? 's' : ''); }
         }
       },
       legend: {
@@ -82,7 +82,19 @@ var BulletVotes = BulletVotes || {};
         type: 'donut',
         columns: BulletVotes.bulletFieldNames.map(function(fieldname) {
           return [fieldname, 0];
-        })
+        }).concat([['other', 0]]),
+        names: BulletVotes.bulletFieldLabels,
+        order: null
+      },
+      donut: {
+        label: {
+          show: false
+        }
+      },
+      tooltip: {
+        format: {
+          value: function (value, ratio, id, index) { return value + ' votes (' + d3.format('%')(ratio) + ')'; }
+        }
       }
     });
   };
@@ -96,8 +108,17 @@ var BulletVotes = BulletVotes || {};
   };
 
   NS.updateWardCandidatesChart = function(values) {
+    var sorted = _(values).sortBy(1).reverse();
+    var highest5 = sorted.slice(0, 5);
+    var lowest = sorted.slice(5);
+    var other = lowest.reduce(function(s, v) { return ['other', s[1] + v[1]]; });
+
+    NS.wardCandidatesChart.legend.hide(_(lowest).pluck(0));
+    NS.wardCandidatesChart.legend.show(_(highest5).pluck(0));
+    NS.wardCandidatesChart.legend.show('other');
+
     NS.wardCandidatesChart.load({
-      columns: values
+      columns: highest5.concat([other]).concat(lowest.map(function(v) { return [v[0], 0]; }))
     });
   };
 
@@ -109,6 +130,14 @@ var BulletVotes = BulletVotes || {};
       'reynolds_brown', 'goode', 'aument_loughrey', 'cohen', 'alexander',
       'thomas', 'greenlee', 'cain', 'ayers', 'write_in'
     ];
+    BulletVotes.bulletFieldLabels = {
+      'neilson': 'Neilson', 'rizzo': 'Rizzo', 'wyatt': 'Wyatt', 'gym': 'Gym',
+      'domb': 'Domb', 'green': 'Green', 'steinke': 'Steinke',
+      'reynolds_brown': 'Reynolds Brown', 'goode': 'Goode',
+      'aument_loughrey': 'Aument-Loughrey', 'cohen': 'Cohen',
+      'alexander': 'Alexander', 'thomas': 'Thomas', 'greenlee': 'Greenlee',
+      'cain': 'Cain', 'ayers': 'Ayers', 'write_in': 'Write in', 'other': 'Other'
+    };
 
     BulletVotes.initWardVotesChart();
     BulletVotes.initWardCandidatesChart();

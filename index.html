@@ -1,0 +1,200 @@
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Boilerplate | phila.gov</title>
+    <link rel='icon' type='image/x-icon' href="//cityofphiladelphia.github.io/patterns/images/favicon.ico">
+    <meta name="description" content="">
+
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+    <!--Ionicons are optional-->
+    <link rel="stylesheet" href="//code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+
+    <!-- include cartodb.js library -->
+    <script src="http://libs.cartocdn.com/cartodb.js/v3/cartodb.js"></script>
+    <link rel="stylesheet" href="http://libs.cartocdn.com/cartodb.js/v3/themes/css/cartodb.css" />
+
+    <!-- Mustache for sidebar templating -->
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mustache.js/0.8.1/mustache.min.js"></script>
+
+    <!-- Load d3.js and c3.js -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/c3/0.4.10/c3.min.css" rel="stylesheet" type="text/css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.min.js" charset="utf-8"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/c3/0.4.10/c3.min.js"></script>
+
+    <!--pattern stylesheet includes foundation css -->
+    <link rel="stylesheet" href="//cityofphiladelphia.github.io/patterns/dist/0.11.2/css/patterns.css">
+
+    <!-- local styles for the map and sidebar -->
+    <link rel="stylesheet" href="css/style.css" />
+
+    <link rel="canonical" href="">
+
+    <script src="//cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.3/modernizr.js"></script>
+
+    <!-- Mustache Templates -->
+    <script id="ward-votes-header-tpl" type="text/html">
+      Throughout Ward {{ward_display}}
+    </script>
+
+    <script id="ward-candidates-header-tpl" type="text/html">
+      Throughout Ward {{ward_display}}
+    </script>
+
+    <script id="sidebar-tpl" type="text/html">
+      <h2>How Many Candidates Did Voters Choose?</h2>
+      <h3>Throughout Ward {{ward_display}}</h3>
+      <div>{{_0_votes}}</div>
+      <div>{{_1_votes}}</div>
+      <div>{{_2_votes}}</div>
+      <div>{{_3_votes}}</div>
+      <div>{{_4_votes}}</div>
+      <div>{{_5_votes}}</div>
+
+      <h2>Who Got the Most Undervotes?</h2>
+      <h3>Throughout Ward {{ward_display}}</h3>
+    </script>
+  </head>
+
+  <body>
+    <div class="site" id="page">
+
+      <header data-swiftype-index='false' class="site-header" role="banner">
+        <div class="row site-branding">
+          <div class="small-24 medium-12 columns">
+            <a href="http://alpha.phila.gov"><img src="//cityofphiladelphia.github.io/patterns/images/city-of-philadelphia-logo.png" class="logo" alt="City of Philadelphia"></a>
+
+            <h1 class="site-title">phila.gov</h1>
+            <h2 class="site-description">City of Philadelphia</h2>
+          </div>
+          <div class="small-24 medium-12 columns">
+            <form class="search">
+              <input type="text" placeholder="Search alpha.phila.gov"><input type="submit">
+            </form>
+          </div>
+        </div>
+      </header>
+
+      <div class="row">
+        <div class="small-24 columns">
+          <div class="divider"></div>
+        </div>
+      </div>
+      <div class="row">
+        <div id="breadcrumbs" class="large-24 columns">
+          <ul class="inline-list">
+            <li><a href="#">Home</a></li>
+            <li><a href="#">Grandparent</a></li>
+            <li><a href="#">Parent</a></li>
+            <li>Child</li>
+          </ul>
+        </div>
+      </div>
+
+<article data-swiftype-name="body" data-swiftype-type="text">
+  <div class="row">
+    <div class="large-24 columns">
+      <h1 class="entry-title">Page Title</h1>
+    </div>
+  </div>
+  <div class="row">
+    <div class="large-12 columns">
+
+      <!-- The CartoDB Map element -->
+      <div id="map"></div>
+
+    </div>
+    <div class="large-12 columns">
+      <aside id="secondary" class="related" role="complementary">
+
+        <div id="intro">
+          <h3>What is Bullet Voting?</h3>
+          <p>Each voter is allowed 5 choices for City Council candidates. Many voters choose fewer than 5. When a voter only chooses one candidate, it is known as “bullet voting”.</p>
+          <p>Click a ward in the map to see more information.</p>
+        </div>
+
+        <!-- Ward-specifc Content -->
+        <div id="stats" class="hide">
+
+          <h2>How Many Candidates Did Voters Choose?</h2>
+
+          <h3 id="ward-votes-header"></h3>
+          <div id="ward-votes-chart-wrapper"></div>
+
+          <h2>Who Got the Most Undervotes?</h2>
+          <h3 id="ward-candidates-header"></h3>
+
+        </div>
+
+      </aside>
+    </div>
+  </div>
+</article>
+
+    </div><!-- End #page -->
+
+    <!-- Begin Footer -->
+    <footer data-swiftype-index='false' class="site-footer" role="contentinfo">
+      <section class="fat">
+        <div class="row">
+          <div class="large-8 columns">
+            <h1>Government</h1>
+            <nav>
+              <ul>
+                <li><a href="http://alpha.phila.gov">alpha.phila.gov</a></li>
+                <li><a href="http://alpha.phila.gov/departments">Department Directory</a></li>
+                <li><a href="http://www.phila.gov/mayor">Mayor's Office</a></li>
+                <li><a href="http://iframe.publicstuff.com/#?client_id=242">Report an Issue / 311</a></li>
+                <li><a href="http://cityofphiladelphia.wordpress.com/">News</a></li>
+              </ul>
+            </nav>
+          </div>
+          <div class="large-16 columns">
+            <h1>Browse alpha.phila.gov</h1>
+            <nav>
+              <ul class="columns-2">
+                <li><a href="http://alpha.phila.gov/browse/business">Business</a></li>
+                <li><a href="http://alpha.phila.gov/browse/health">Health</a></li>
+                <li><a href="http://alpha.phila.gov/browse/jobs-and-contracts">Jobs and Contracts</a></li>
+                <li><a href="http://alpha.phila.gov/browse/legal">Legal</a></li>
+                <li><a href="http://alpha.phila.gov/browse/payments-and-taxes">Payments and Taxes</a></li>
+                <li><a href="http://alpha.phila.gov/browse/permits-licenses">Permits and Licenses</a></li>
+                <li><a href="http://alpha.phila.gov/browse/property-housing">Property and Housing</a></li>
+                <li><a href="http://alpha.phila.gov/browse/public-safety">Public Safety</a></li>
+                <li><a href="http://alpha.phila.gov/browse/recreation">Recreation</a></li>
+                <li><a href="http://alpha.phila.gov/browse/streets-and-utilities">Streets and Utilities</a></li>
+              </ul>
+            </nav>
+          </div>
+        </div>
+      </section>
+      <div class="row classic">
+        <div class="large-6 columns">
+          <a href="#">Feedback</a>
+        </div>
+        <div class="large-12 columns">
+          <nav>
+            <ul class="inline-list">
+              <li><a href="http://alpha.phila.gov/terms-of-use">Terms of use</a></li>
+              <li><a href="http://www.phila.gov/privacy/pdfs/FinalCityOpenRecords.pdf">Right to know (pdf)</a></li>
+              <li><a href="http://alpha.phila.gov/privacypolicy">Privacy Policy</a></li>
+            </ul>
+          </nav>
+        </div>
+      </div>
+    </footer>
+
+    <!-- End Footer -->
+
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/foundation/5.5.1/js/foundation.min.js"></script>
+    <script src="//cityofphiladelphia.github.io/patterns/dist/0.11.2/js/patterns.min.js"></script>
+    <script>
+      $(document).foundation();
+    </script>
+    <script type="text/javascript" src="js/main.js"></script>
+  </body>
+</html>

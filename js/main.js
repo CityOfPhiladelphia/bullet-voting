@@ -46,6 +46,15 @@ var BulletVotes = BulletVotes || {};
     'Reynolds Brown', 'Goode', 'Aument-Loughrey', 'Cohen', 'Alexander',
     'Thomas', 'Greenlee', 'Cain', 'Ayers', 'Write in', 'Other'
   ]);
+  NS.bulletFieldColors = {
+    'domb': '#a6761d',
+    'green': '#1f78b4',
+    'greenlee': '#e7298a',
+    'gym': '#33a02c',
+    'neilson': '#d95f02',
+    'rizzo': '#e31a1c',
+    'thomas': '#fdbf6f'
+  };//_.object(NS.bulletFieldNames, [])
 
   NS.pairFieldNames = [
     'wyatt_neilson', 'green_greenlee', 'green_domb', 'domb_rizzo', 'greenlee_neilson', 'neilson_rizzo', 'domb_gym', 'wyatt_greenlee', 'greenlee_gym', 'wyatt_cohen', 'green_rizzo', 'steinke_rizzo', 'steinke_goode', 'domb_steinke', 'green_wyatt', 'cohen_gym', 'reynolds_brown_neilson', 'cohen_thomas', 'wyatt_rizzo', 'domb_neilson', 'wyatt_gym', 'domb_wyatt',
@@ -118,6 +127,7 @@ var BulletVotes = BulletVotes || {};
           return [fieldname, 0];
         })/*.concat([['other', 0]])*/,
         names: BulletVotes.bulletFieldLabels,
+        colors: BulletVotes.bulletFieldColors,
         order: null
       },
       donut: {
@@ -125,7 +135,7 @@ var BulletVotes = BulletVotes || {};
           show: false,
         },
         expand: false,
-        title: 'Top 5 Bullet'
+        title: 'Top 5 Bullets'
       },
       size: {
         height: 200
@@ -160,7 +170,7 @@ var BulletVotes = BulletVotes || {};
           show: false
         },
         expand: false,
-        title: 'Top 5 Pair'
+        title: 'Top 5 Pairs'
       },
       size: {
         height: 200

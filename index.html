@@ -57,6 +57,24 @@
     <script id="division-candidates-header-tpl" type="text/html">
       By Division in Ward {{ward_display}}
     </script>
+
+    <script id="ward-bullets-legend-tpl" type="text/html">
+      {{#labels}}
+        <div class="legend-label">
+          <span class="legend-label-color" style="background-color: {{color}}"></span>
+          <span class="legend-label-text">{{text}}</span>
+        </div>
+      {{/labels}}
+    </script>
+
+    <script id="ward-pairs-legend-tpl" type="text/html">
+      {{#labels}}
+        <div class="legend-label">
+          <span class="legend-label-color" style="background-color: {{color}}"></span>
+          <span class="legend-label-text">{{text}}</span>
+        </div>
+      {{/labels}}
+    </script>
   </head>
 
   <body>
@@ -134,9 +152,11 @@
           <div class="row">
             <div class="small-12 columns">
               <div id="ward-bullets-chart-wrapper"></div>
+              <div id="ward-bullets-legend" class="ward-donut-legend"></div>
             </div>
             <div class="small-12 columns">
               <div id="ward-pairs-chart-wrapper"></div>
+              <div id="ward-pairs-legend" class="ward-donut-legend"></div>
             </div>
           </div>
 

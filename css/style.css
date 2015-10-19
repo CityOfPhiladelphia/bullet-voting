@@ -40,6 +40,22 @@ h1 {
 	font-weight: normal;
 }
 
+.ward-donut-legend {
+	text-align: center;
+}
+
+.legend-label {
+	font-size: 0.8rem;
+	display: inline-block;
+}
+
+.legend-label-color {
+	display: inline-block;
+	height: 0.7em;
+	width: 0.7em;
+	border: 1px solid #eee;
+}
+
 dl {
 	padding: 2px;
 	line-height: 2em;

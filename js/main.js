@@ -188,9 +188,16 @@ var BulletVotes = BulletVotes || {};
   };
 
   NS.updateWardBulletsLegend = function(highest, lowest) {
-    // NS.wardBulletsChart.legend.hide(_(lowest).pluck(0));
-    // NS.wardBulletsChart.legend.show(_(highest).pluck(0));
-    // NS.wardBulletsChart.legend.show('other');
+    var tpl = document.getElementById('ward-bullets-legend-tpl').innerHTML;
+    var output = Mustache.render(tpl, {
+      'labels': highest.map(function(v) {
+        var fieldname = v[0];
+        var text = NS.bulletFieldLabels[fieldname];
+        var color = NS.bulletFieldColors[fieldname];
+        return {'text': text, 'color': color};
+      })
+    });
+    document.getElementById('ward-bullets-legend').innerHTML = output;
   };
 
   NS.updateWardBulletsChart = function(values) {
@@ -209,9 +216,16 @@ var BulletVotes = BulletVotes || {};
   };
 
   NS.updateWardPairsLegend = function(highest, lowest) {
-    // NS.wardPairsChart.legend.hide(_(lowest).pluck(0));
-    // NS.wardPairsChart.legend.show(_(highest).pluck(0));
-    // NS.wardPairsChart.legend.show('other');
+    var tpl = document.getElementById('ward-pairs-legend-tpl').innerHTML;
+    var output = Mustache.render(tpl, {
+      'labels': highest.map(function(v) {
+        var fieldname = v[0];
+        var text = NS.pairFieldLabels[fieldname];
+        var color = NS.pairFieldColors[fieldname];
+        return {'text': text, 'color': color};
+      })
+    });
+    document.getElementById('ward-pairs-legend').innerHTML = output;
   };
 
   NS.updateWardPairsChart = function(values) {
@@ -229,11 +243,28 @@ var BulletVotes = BulletVotes || {};
     });
   };
 
+  NS.isChartsInitialized = false;
   NS.goToWard = function(ward) {
     var sql = new cartodb.SQL({ user: 'mjumbewu' });
     sql.execute("SELECT * FROM political_wards_merge WHERE ward = {{ward}}", {'ward': ward})
       .done(function(data) {
         var d = data.rows[0];
+
+        BulletVotes.hideIntro();
+        BulletVotes.showStats();
+
+        // We don't want to initialize the charts until after the stats
+        // container is visible, because the charts need the size of the
+        // container to be calculated.
+        //
+        // TODO: Think about doing this off-screen so that we don't have to
+        // actually show the stats section before it's all ready.
+        if (!NS.isChartsInitialized) {
+          NS.isChartsInitialized = true;
+          NS.initWardVotesChart();
+          NS.initWardBulletsChart();
+          NS.initWardPairsChart();
+        }
 
         BulletVotes.setWardVotesHeader(d);
         BulletVotes.setWardBulletsHeader(d);
@@ -255,9 +286,6 @@ var BulletVotes = BulletVotes || {};
           })
         );
 
-        BulletVotes.hideIntro();
-        BulletVotes.showStats();
-
         console.log(data.rows);
       })
       .error(function(errors) {
@@ -273,10 +301,6 @@ function canPushState() {
 }
 
 function main() {
-  BulletVotes.initWardVotesChart();
-  BulletVotes.initWardBulletsChart();
-  BulletVotes.initWardPairsChart();
-
   // add link to CartoDB viz.json here
   cartodb.createVis('map', 'https://mjumbewu.cartodb.com/api/v2/viz/416a0320-757a-11e5-8ba1-0e3ff518bd15/viz.json', {
       shareable: false ,

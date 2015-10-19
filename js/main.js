@@ -42,7 +42,7 @@ var BulletVotes = BulletVotes || {};
         x: {
           label: {
             text: 'Number of Candidates Chosen',
-            position: 'outer-middle'
+            position: 'outer-center'
           }
         },
         y: {
@@ -51,6 +51,14 @@ var BulletVotes = BulletVotes || {};
             position: 'outer-middle'
           }
         }
+      },
+      tooltip: {
+        format: {
+          title: function (x) { return x + '&nbsp;candidate' + (x != 1 ? 's' : ''); }
+        }
+      },
+      legend: {
+        hide: true
       }
     });
   };
@@ -82,6 +90,8 @@ var BulletVotes = BulletVotes || {};
   };
 
   function main() {
+    // NOTE: This is not ideal, but for now we will hard-code the candidate
+    // single and pair values.
     BulletVotes.bulletFieldNames = [
       'neilson', 'rizzo', 'wyatt', 'gym', 'domb', 'green', 'steinke',
       'reynolds_brown', 'goode', 'aument_loughrey', 'cohen', 'alexander',

@@ -24,33 +24,72 @@ var BulletVotes = BulletVotes || {};
 
   NS.initWardVotesChart = function() {
     NS.wardVotesChart = c3.generate({
-        bindto: '#ward-votes-chart-wrapper',
-        data: {
-            columns: [
-                ['# of Candidates Chosen', 0, 0, 0, 0, 0, 0]
-            ],
-            type: 'bar'
-        },
-        bar: {
-            width: {
-                ratio: 0.85 // this makes bar width 50% of length between ticks
-            }
-            // or
-            //width: 100 // this makes bar width 100px
+      bindto: '#ward-votes-chart-wrapper',
+      data: {
+        columns: [
+          ['Number of Voters', 0, 0, 0, 0, 0, 0]
+        ],
+        type: 'bar'
+      },
+      bar: {
+        width: {
+          ratio: 0.85 // this makes bar width 50% of length between ticks
         }
+        // or
+        //width: 100 // this makes bar width 100px
+      },
+      axis: {
+        x: {
+          label: {
+            text: 'Number of Candidates Chosen',
+            position: 'outer-middle'
+          }
+        },
+        y: {
+          label: {
+            text: 'Number of Voters',
+            position: 'outer-middle'
+          }
+        }
+      }
+    });
+  };
+
+  NS.initWardCandidatesChart = function() {
+    NS.wardCandidatesChart = c3.generate({
+      bindto: '#ward-candidates-chart-wrapper',
+      data: {
+        type: 'donut',
+        columns: BulletVotes.bulletFieldNames.map(function(fieldname) {
+          return [fieldname, 0];
+        })
+      }
     });
   };
 
   NS.updateWardVotesChart = function(values) {
     NS.wardVotesChart.load({
       columns: [
-        ['# of Candidates Chosen'].concat(values)
+        ['Number of Voters'].concat(values)
       ]
     });
   };
 
+  NS.updateWardCandidatesChart = function(values) {
+    NS.wardCandidatesChart.load({
+      columns: values
+    });
+  };
+
   function main() {
+    BulletVotes.bulletFieldNames = [
+      'neilson', 'rizzo', 'wyatt', 'gym', 'domb', 'green', 'steinke',
+      'reynolds_brown', 'goode', 'aument_loughrey', 'cohen', 'alexander',
+      'thomas', 'greenlee', 'cain', 'ayers', 'write_in'
+    ];
+
     BulletVotes.initWardVotesChart();
+    BulletVotes.initWardCandidatesChart();
 
     // add link to CartoDB viz.json here
     cartodb.createVis('map', 'https://mjumbewu.cartodb.com/api/v2/viz/416a0320-757a-11e5-8ba1-0e3ff518bd15/viz.json', {
@@ -82,6 +121,11 @@ var BulletVotes = BulletVotes || {};
               d['_0_votes'], d['_1_votes'], d['_2_votes'],
               d['_3_votes'], d['_4_votes'], d['_5_votes']
             ]);
+            BulletVotes.updateWardCandidatesChart(
+              BulletVotes.bulletFieldNames.map(function(fieldname) {
+                return [fieldname, d[fieldname]];
+              })
+            );
 
             BulletVotes.hideIntro();
             BulletVotes.showStats();

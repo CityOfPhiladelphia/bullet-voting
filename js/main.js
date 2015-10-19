@@ -34,6 +34,17 @@ var BulletVotes = BulletVotes || {};
     document.getElementById('division-candidates-header').innerHTML = output;
   };
 
+  // NOTE: Hard-coding these cadidate values is not ideal, but is easiest for
+  // now.
+  NS.bulletFieldNames = {
+    'neilson': 'Neilson', 'rizzo': 'Rizzo', 'wyatt': 'Wyatt', 'gym': 'Gym',
+    'domb': 'Domb', 'green': 'Green', 'steinke': 'Steinke',
+    'reynolds_brown': 'Reynolds Brown', 'goode': 'Goode',
+    'aument_loughrey': 'Aument-Loughrey', 'cohen': 'Cohen',
+    'alexander': 'Alexander', 'thomas': 'Thomas', 'greenlee': 'Greenlee',
+    'cain': 'Cain', 'ayers': 'Ayers', 'write_in': 'Write in', 'other': 'Other'
+  };
+
   NS.initWardVotesChart = function() {
     NS.wardVotesChart = c3.generate({
       bindto: '#ward-votes-chart-wrapper',
@@ -47,8 +58,6 @@ var BulletVotes = BulletVotes || {};
         width: {
           ratio: 0.85 // this makes bar width 50% of length between ticks
         }
-        // or
-        //width: 100 // this makes bar width 100px
       },
       size: {
         height: 200
@@ -78,21 +87,25 @@ var BulletVotes = BulletVotes || {};
     });
   };
 
-  NS.initWardCandidatesChart = function() {
-    NS.wardCandidatesChart = c3.generate({
+  NS.initWardBulletsChart = function() {
+    NS.wardBulletsChart = c3.generate({
       bindto: '#ward-candidates-chart-wrapper',
       data: {
         type: 'donut',
         columns: BulletVotes.bulletFieldNames.map(function(fieldname) {
           return [fieldname, 0];
         }).concat([['other', 0]]),
-        names: BulletVotes.bulletFieldLabels,
+        names: BulletVotes.bulletFieldNames,
         order: null
       },
       donut: {
         label: {
           show: false
-        }
+        },
+        title: 'Bullet Votes'
+      },
+      size: {
+        height: 200
       },
       tooltip: {
         format: {
@@ -110,40 +123,26 @@ var BulletVotes = BulletVotes || {};
     });
   };
 
-  NS.updateWardCandidatesChart = function(values) {
+  NS.updateWardBulletsChart = function(values) {
+    // Sort the values. The highest 5 values will be displayed. The remaining
+    // values will be collected into an 'other' category.
     var sorted = _(values).sortBy(1).reverse();
-    var highest5 = sorted.slice(0, 5);
+    var highest = sorted.slice(0, 5);
     var lowest = sorted.slice(5);
     var other = lowest.reduce(function(s, v) { return ['other', s[1] + v[1]]; });
 
-    NS.wardCandidatesChart.legend.hide(_(lowest).pluck(0));
-    NS.wardCandidatesChart.legend.show(_(highest5).pluck(0));
-    NS.wardCandidatesChart.legend.show('other');
+    NS.wardBulletsChart.legend.hide(_(lowest).pluck(0));
+    NS.wardBulletsChart.legend.show(_(highest).pluck(0));
+    NS.wardBulletsChart.legend.show('other');
 
-    NS.wardCandidatesChart.load({
-      columns: highest5.concat([other]).concat(lowest.map(function(v) { return [v[0], 0]; }))
+    NS.wardBulletsChart.load({
+      columns: highest.concat([other]).concat(lowest.map(function(v) { return [v[0], 0]; }))
     });
   };
 
   function main() {
-    // NOTE: This is not ideal, but for now we will hard-code the candidate
-    // single and pair values.
-    BulletVotes.bulletFieldNames = [
-      'neilson', 'rizzo', 'wyatt', 'gym', 'domb', 'green', 'steinke',
-      'reynolds_brown', 'goode', 'aument_loughrey', 'cohen', 'alexander',
-      'thomas', 'greenlee', 'cain', 'ayers', 'write_in'
-    ];
-    BulletVotes.bulletFieldLabels = {
-      'neilson': 'Neilson', 'rizzo': 'Rizzo', 'wyatt': 'Wyatt', 'gym': 'Gym',
-      'domb': 'Domb', 'green': 'Green', 'steinke': 'Steinke',
-      'reynolds_brown': 'Reynolds Brown', 'goode': 'Goode',
-      'aument_loughrey': 'Aument-Loughrey', 'cohen': 'Cohen',
-      'alexander': 'Alexander', 'thomas': 'Thomas', 'greenlee': 'Greenlee',
-      'cain': 'Cain', 'ayers': 'Ayers', 'write_in': 'Write in', 'other': 'Other'
-    };
-
     BulletVotes.initWardVotesChart();
-    BulletVotes.initWardCandidatesChart();
+    BulletVotes.initWardBulletsChart();
 
     // add link to CartoDB viz.json here
     cartodb.createVis('map', 'https://mjumbewu.cartodb.com/api/v2/viz/416a0320-757a-11e5-8ba1-0e3ff518bd15/viz.json', {
@@ -178,8 +177,8 @@ var BulletVotes = BulletVotes || {};
               d['_0_votes'], d['_1_votes'], d['_2_votes'],
               d['_3_votes'], d['_4_votes'], d['_5_votes']
             ]);
-            BulletVotes.updateWardCandidatesChart(
-              BulletVotes.bulletFieldNames.map(function(fieldname) {
+            BulletVotes.updateWardBulletsChart(
+              _(BulletVotes.bulletFieldNames).keys().map(function(fieldname) {
                 return [fieldname, d[fieldname]];
               })
             );

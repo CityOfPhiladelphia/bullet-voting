@@ -50,6 +50,9 @@ var BulletVotes = BulletVotes || {};
         // or
         //width: 100 // this makes bar width 100px
       },
+      size: {
+        height: 200
+      },
       axis: {
         x: {
           label: {

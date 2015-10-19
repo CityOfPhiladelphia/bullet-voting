@@ -187,6 +187,12 @@ var BulletVotes = BulletVotes || {};
     });
   };
 
+  NS.updateWardBulletsLegend = function(highest, lowest) {
+    // NS.wardBulletsChart.legend.hide(_(lowest).pluck(0));
+    // NS.wardBulletsChart.legend.show(_(highest).pluck(0));
+    // NS.wardBulletsChart.legend.show('other');
+  };
+
   NS.updateWardBulletsChart = function(values) {
     // Sort the values. The highest 5 values will be displayed. The remaining
     // values will be collected into an 'other' category.
@@ -195,13 +201,17 @@ var BulletVotes = BulletVotes || {};
     var lowest = sorted.slice(5);
     var other = lowest.reduce(function(s, v) { return ['other', s[1] + v[1]]; });
 
-    // NS.wardBulletsChart.legend.hide(_(lowest).pluck(0));
-    // NS.wardBulletsChart.legend.show(_(highest).pluck(0));
-    // NS.wardBulletsChart.legend.show('other');
+    NS.updateWardBulletsLegend(highest, lowest);
 
     NS.wardBulletsChart.load({
       columns: highest.concat([other]).concat(lowest.map(function(v) { return [v[0], 0]; }))
     });
+  };
+
+  NS.updateWardPairsLegend = function(highest, lowest) {
+    // NS.wardPairsChart.legend.hide(_(lowest).pluck(0));
+    // NS.wardPairsChart.legend.show(_(highest).pluck(0));
+    // NS.wardPairsChart.legend.show('other');
   };
 
   NS.updateWardPairsChart = function(values) {
@@ -212,9 +222,7 @@ var BulletVotes = BulletVotes || {};
     var lowest = sorted.slice(5);
     var other = lowest.reduce(function(s, v) { return ['other', s[1] + v[1]]; });
 
-    // NS.wardPairsChart.legend.hide(_(lowest).pluck(0));
-    // NS.wardPairsChart.legend.show(_(highest).pluck(0));
-    // NS.wardPairsChart.legend.show('other');
+    NS.updateWardPairsLegend(highest, lowest);
 
     NS.wardPairsChart.load({
       columns: highest.concat([other]).concat(lowest.map(function(v) { return [v[0], 0]; }))

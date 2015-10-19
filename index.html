@@ -47,18 +47,12 @@
       Throughout Ward {{ward_display}}
     </script>
 
-    <script id="sidebar-tpl" type="text/html">
-      <h2>How Many Candidates Did Voters Choose?</h2>
-      <h3>Throughout Ward {{ward_display}}</h3>
-      <div>{{_0_votes}}</div>
-      <div>{{_1_votes}}</div>
-      <div>{{_2_votes}}</div>
-      <div>{{_3_votes}}</div>
-      <div>{{_4_votes}}</div>
-      <div>{{_5_votes}}</div>
+    <script id="division-votes-header-tpl" type="text/html">
+      By Division in Ward {{ward_display}}
+    </script>
 
-      <h2>Who Got the Most Undervotes?</h2>
-      <h3>Throughout Ward {{ward_display}}</h3>
+    <script id="division-candidates-header-tpl" type="text/html">
+      By Division in Ward {{ward_display}}
     </script>
   </head>
 
@@ -127,9 +121,15 @@
           <h3 id="ward-votes-header"></h3>
           <div id="ward-votes-chart-wrapper"></div>
 
+          <h3 id="division-votes-header"></h3>
+          <div id="division-votes-chart-wrapper"></div>
+
           <h2>Who Got the Most Undervotes?</h2>
           <h3 id="ward-candidates-header"></h3>
           <div id="ward-candidates-chart-wrapper"></div>
+
+          <h3 id="division-candidates-header"></h3>
+          <div id="division-candidates-chart-wrapper"></div>
 
         </div>
 

@@ -22,6 +22,18 @@ var BulletVotes = BulletVotes || {};
     document.getElementById('ward-candidates-header').innerHTML = output;
   };
 
+  NS.setDivisionVotesHeader = function(tcontext) {
+    var tpl = document.getElementById('division-votes-header-tpl').innerHTML;
+    var output = Mustache.render(tpl, tcontext);
+    document.getElementById('division-votes-header').innerHTML = output;
+  };
+
+  NS.setDivisionCandidatesHeader = function(tcontext) {
+    var tpl = document.getElementById('division-candidates-header-tpl').innerHTML;
+    var output = Mustache.render(tpl, tcontext);
+    document.getElementById('division-candidates-header').innerHTML = output;
+  };
+
   NS.initWardVotesChart = function() {
     NS.wardVotesChart = c3.generate({
       bindto: '#ward-votes-chart-wrapper',
@@ -127,6 +139,9 @@ var BulletVotes = BulletVotes || {};
 
             BulletVotes.setWardVotesHeader(d);
             BulletVotes.setWardCandidatesHeader(d);
+            BulletVotes.setDivisionVotesHeader(d);
+            BulletVotes.setDivisionCandidatesHeader(d);
+
             BulletVotes.updateWardVotesChart([
               d['_0_votes'], d['_1_votes'], d['_2_votes'],
               d['_3_votes'], d['_4_votes'], d['_5_votes']

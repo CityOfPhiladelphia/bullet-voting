@@ -116,7 +116,7 @@ var BulletVotes = BulletVotes || {};
         type: 'donut',
         columns: BulletVotes.bulletFieldNames.map(function(fieldname) {
           return [fieldname, 0];
-        }).concat([['other', 0]]),
+        })/*.concat([['other', 0]])*/,
         names: BulletVotes.bulletFieldLabels,
         order: null
       },
@@ -125,14 +125,14 @@ var BulletVotes = BulletVotes || {};
           show: false,
         },
         expand: false,
-        title: 'Bullet Votes'
+        title: 'Top 5 Bullet'
       },
       size: {
         height: 200
       },
       tooltip: {
         format: {
-          value: function (value, ratio, id, index) { return value + ' votes (' + d3.format('%')(ratio) + ')'; }
+          value: function(value, ratio, id, index) { return value + ' votes'; }
         }
       },
       legend: {
@@ -151,7 +151,7 @@ var BulletVotes = BulletVotes || {};
         type: 'donut',
         columns: BulletVotes.pairFieldNames.map(function(fieldname) {
           return [fieldname, 0];
-        }).concat([['other', 0]]),
+        })/*.concat([['other', 0]])*/,
         names: BulletVotes.pairFieldLabels,
         order: null
       },
@@ -160,14 +160,14 @@ var BulletVotes = BulletVotes || {};
           show: false
         },
         expand: false,
-        title: 'Pair Votes'
+        title: 'Top 5 Pair'
       },
       size: {
         height: 200
       },
       tooltip: {
         format: {
-          value: function (value, ratio, id, index) { return value + ' votes (' + d3.format('%')(ratio) + ')'; }
+          value: function(value, ratio, id, index) { return value + ' votes'; }
         }
       },
       legend: {
@@ -204,7 +204,7 @@ var BulletVotes = BulletVotes || {};
     NS.updateWardBulletsLegend(highest, lowest);
 
     NS.wardBulletsChart.load({
-      columns: highest.concat([other]).concat(lowest.map(function(v) { return [v[0], 0]; }))
+      columns: highest./*concat([other]).*/concat(lowest.map(function(v) { return [v[0], 0]; }))
     });
   };
 
@@ -225,7 +225,7 @@ var BulletVotes = BulletVotes || {};
     NS.updateWardPairsLegend(highest, lowest);
 
     NS.wardPairsChart.load({
-      columns: highest.concat([other]).concat(lowest.map(function(v) { return [v[0], 0]; }))
+      columns: highest./*concat([other]).*/concat(lowest.map(function(v) { return [v[0], 0]; }))
     });
   };
 

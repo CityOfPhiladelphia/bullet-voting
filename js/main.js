@@ -2,12 +2,20 @@ var BulletVotes = BulletVotes || {};
 
 (function(NS) {
 
+  NS.showIntro = function() {
+    document.getElementById('intro').classList.remove('hide');
+  };
+
   NS.hideIntro = function() {
     document.getElementById('intro').classList.add('hide');
   };
 
   NS.showStats = function() {
     document.getElementById('stats').classList.remove('hide');
+  };
+
+  NS.hideStats = function() {
+    document.getElementById('stats').classList.add('hide');
   };
 
   NS.setWardVotesHeader = function(tcontext) {
@@ -409,7 +417,7 @@ var BulletVotes = BulletVotes || {};
       }
     };
 
-    if (canPushState()) {
+    if (canPushState() && window.location.hash != ('#/' + ward)) {
       window.history.pushState(null, NS.getWardTitle(ward), '#/' + ward);
     }
 
@@ -480,6 +488,11 @@ var BulletVotes = BulletVotes || {};
       });
   };
 
+  NS.closeWardStats = function() {
+    BulletVotes.showIntro();
+    BulletVotes.hideStats();
+  };
+
   NS.wardHashPattern = /^#\/(\d+)$/;
   NS.divisionHashPattern = /^#\/(\d+)\/(\d+)$/;
 
@@ -488,7 +501,7 @@ var BulletVotes = BulletVotes || {};
     var match;
 
     if (!hash) {
-      // TODO: Close the stats pane and show the intro
+      NS.closeWardStats();
       return;
     }
 

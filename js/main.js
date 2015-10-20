@@ -276,6 +276,10 @@ var BulletVotes = BulletVotes || {};
     NS.pairFieldColors = NS.wardPairsChart.data.colors();
   };
 
+  NS.initDivisionCandidatesTable = function() {
+    // Nothing to do here for now.
+  };
+
   NS.updateWardVotesChart = function(values) {
     NS.wardVotesChart.load({
       columns: [
@@ -346,6 +350,34 @@ var BulletVotes = BulletVotes || {};
     });
   };
 
+  NS.updateDivisionCandidatesTable = function(data) {
+    var tpl, output;
+
+    data.rows.forEach(function(row) {
+      row.bullets = [];
+      row.pairs = [];
+
+      NS.bulletFieldNames.forEach(function(fieldname) {
+        if (row[fieldname]) {
+          row.bullets.push({label: NS.bulletFieldLabels[fieldname], count: row[fieldname]});
+        }
+      });
+
+      NS.pairFieldNames.forEach(function(fieldname) {
+        if (row[fieldname]) {
+          row.pairs.push({label: NS.pairFieldLabels[fieldname], count: row[fieldname]});
+        }
+      });
+
+      row.bullets = _(row.bullets).sortBy('count').reverse();
+      row.pairs = _(row.pairs).sortBy('count').reverse();
+    });
+
+    tpl = document.getElementById('division-candidates-table-tpl').innerHTML;
+    output = Mustache.render(tpl, data);
+    document.getElementById('division-candidates-table-wrapper').innerHTML = output;
+  };
+
   NS.isChartsInitialized = false;
   NS.goToWard = function(ward) {
     var sql;
@@ -365,6 +397,7 @@ var BulletVotes = BulletVotes || {};
         NS.initDivisionVotesChart();
         NS.initWardBulletsChart();
         NS.initWardPairsChart();
+        NS.initDivisionCandidatesTable();
       }
     };
 
@@ -421,15 +454,13 @@ var BulletVotes = BulletVotes || {};
         var _5_votes = _(data.rows).pluck('_5_perc');
         _ensureStatsShown();
 
-        // BulletVotes.updateDivisionBulletsTable(data);
+        // BulletVotes.updateDivisionCandidatesTable(data);
         BulletVotes.updateDivisionVotesChart([
-          ['0 Chosen'].concat(_0_votes),
-          ['1 Chosen'].concat(_1_votes),
-          ['2 Chosen'].concat(_2_votes),
-          ['3 Chosen'].concat(_3_votes),
-          ['4 Chosen'].concat(_4_votes),
-          ['5 Chosen'].concat(_5_votes),
+          ['0 Chosen'].concat(_0_votes), ['1 Chosen'].concat(_1_votes),
+          ['2 Chosen'].concat(_2_votes), ['3 Chosen'].concat(_3_votes),
+          ['4 Chosen'].concat(_4_votes), ['5 Chosen'].concat(_5_votes),
         ]);
+        BulletVotes.updateDivisionCandidatesTable(data);
       })
       .error(function(errors) {
         // errors contains a list of errors

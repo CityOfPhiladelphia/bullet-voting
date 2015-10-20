@@ -136,6 +136,19 @@ dd {
 
 }
 
+#division-candidates-table-wrapper td:first-child {
+	text-decoration: italic;
+	font-weight: bold;
+	text-align: center;
+}
+
+#division-candidates-table-wrapper td li {
+	font-size: 0.75rem;
+}
+
+
+/* === SVG chart styles === */
+
 .c3-bars-Number-of-Voters .c3-bar {
 	stroke: black!important;
 	stroke-opacity: 0.5;

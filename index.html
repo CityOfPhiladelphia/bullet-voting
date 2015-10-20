@@ -76,7 +76,7 @@
       {{/labels}}
     </script>
 
-    <script id="division-bullets-table-tpl" type="text/html">
+    <script id="division-candidates-table-tpl" type="text/html">
       <table>
         <thead>
           <tr>
@@ -88,9 +88,9 @@
 
         <tbody>
           {{#rows}}
-          <tr>
+          <tr id="division-candidates-row-{{warddiv}}" data-ward="{{ward}}" data-division="{{division}}">
             <td>{{ward_divis}}</td>
-            <td><ol>{{#bullets}}<li>{{label}} ({{count}})</li>{{/bullets}}</ol></td>
+            <td><ol>{{#bullets}}<li>{{label}} ({{count}} votes)</li>{{/bullets}}</ol></td>
             <td><ol>{{#pairs}}<li>{{label}} ({{count}})</li>{{/pairs}}</ol></td>
           </tr>
           {{/rows}}
@@ -184,7 +184,7 @@
         </div>
 
         <h3 id="division-candidates-header"></h3>
-        <div id="division-candidates-chart-wrapper"></div>
+        <div id="division-candidates-table-wrapper"></div>
 
       </div>
     </div>

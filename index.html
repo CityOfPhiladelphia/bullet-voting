@@ -153,44 +153,40 @@
 
     </div>
     <div class="large-12 columns">
-      <aside id="secondary" class="related" role="complementary">
+      <div id="intro">
+        <h3>What is Bullet Voting?</h3>
+        <p>Each voter is allowed 5 choices for City Council candidates. Many voters choose fewer than 5. When a voter only chooses one candidate, it is known as “bullet voting”.</p>
+        <p>Click a ward in the map to see more information.</p>
+      </div>
 
-        <div id="intro">
-          <h3>What is Bullet Voting?</h3>
-          <p>Each voter is allowed 5 choices for City Council candidates. Many voters choose fewer than 5. When a voter only chooses one candidate, it is known as “bullet voting”.</p>
-          <p>Click a ward in the map to see more information.</p>
-        </div>
+      <!-- Ward-specifc Content -->
+      <div id="stats" class="hide">
 
-        <!-- Ward-specifc Content -->
-        <div id="stats" class="hide">
+        <h2>How Many Candidates Did Voters Choose?</h2>
 
-          <h2>How Many Candidates Did Voters Choose?</h2>
+        <h3 id="ward-votes-header"></h3>
+        <div id="ward-votes-chart-wrapper"></div>
 
-          <h3 id="ward-votes-header"></h3>
-          <div id="ward-votes-chart-wrapper"></div>
+        <h3 id="division-votes-header"></h3>
+        <div id="division-votes-chart-wrapper"></div>
 
-          <h3 id="division-votes-header"></h3>
-          <div id="division-votes-chart-wrapper"></div>
-
-          <h2>Who Got the Most Bullet Votes?</h2>
-          <h3 id="ward-bullets-header"></h3>
-          <div class="row">
-            <div class="small-12 columns">
-              <div id="ward-bullets-chart-wrapper"></div>
-              <div id="ward-bullets-legend" class="ward-donut-legend"></div>
-            </div>
-            <div class="small-12 columns">
-              <div id="ward-pairs-chart-wrapper"></div>
-              <div id="ward-pairs-legend" class="ward-donut-legend"></div>
-            </div>
+        <h2>Who Got the Most Bullet Votes?</h2>
+        <h3 id="ward-bullets-header"></h3>
+        <div class="row">
+          <div class="small-12 columns">
+            <div id="ward-bullets-chart-wrapper"></div>
+            <div id="ward-bullets-legend" class="ward-donut-legend"></div>
           </div>
-
-          <h3 id="division-candidates-header"></h3>
-          <div id="division-candidates-chart-wrapper"></div>
-
+          <div class="small-12 columns">
+            <div id="ward-pairs-chart-wrapper"></div>
+            <div id="ward-pairs-legend" class="ward-donut-legend"></div>
+          </div>
         </div>
 
-      </aside>
+        <h3 id="division-candidates-header"></h3>
+        <div id="division-candidates-chart-wrapper"></div>
+
+      </div>
     </div>
   </div>
 </article>

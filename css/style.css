@@ -23,12 +23,16 @@ table td{
 	text-align: center;
 }
 
-p {
-	color: #9299A5;
-}
-
 h1 {
 	margin-top: -5px!important;
+}
+
+#intro {
+	padding: 1rem 3rem;
+}
+
+#intro p {
+	font-size: 1.25rem;
 }
 
 #stats h2 {

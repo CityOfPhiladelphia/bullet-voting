@@ -75,6 +75,28 @@
         </div>
       {{/labels}}
     </script>
+
+    <script id="division-bullets-table-tpl" type="text/html">
+      <table>
+        <thead>
+          <tr>
+            <th>Division</th>
+            <th>Bullets</th>
+            <th>Pairs</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          {{#rows}}
+          <tr>
+            <td>{{ward_divis}}</td>
+            <td><ol>{{#bullets}}<li>{{label}} ({{count}})</li>{{/bullets}}</ol></td>
+            <td><ol>{{#pairs}}<li>{{label}} ({{count}})</li>{{/pairs}}</ol></td>
+          </tr>
+          {{/rows}}
+        </tbody>
+      </table>
+    </script>
   </head>
 
   <body>

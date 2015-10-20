@@ -42,6 +42,8 @@ var BulletVotes = BulletVotes || {};
     document.getElementById('division-candidates-header').innerHTML = output;
   };
 
+  var ybinterp = d3.interpolateRgb('#F2BA13', '#027EA4');
+
   // NOTE: Hard-coding these cadidate values is not ideal, but is easiest for
   // now.
   NS.bulletFieldNames = [
@@ -55,14 +57,23 @@ var BulletVotes = BulletVotes || {};
     'Thomas', 'Greenlee', 'Cain', 'Ayers', 'Write in', 'Other'
   ]);
   NS.bulletFieldColors = {
-    'domb': '#a6761d',
-    'green': '#1f78b4',
-    'greenlee': '#e7298a',
-    'gym': '#33a02c',
-    'neilson': '#d95f02',
-    'rizzo': '#e31a1c',
-    'thomas': '#fdbf6f'
+    'green': '#229A00',
+    'neilson': '#E31A1C',
+    'domb': '#1F78B4',
+    'gym': '#7B00B4',
+    'thomas': '#E3E31A',
+    'rizzo': '#FF7F00',
   };//_.object(NS.bulletFieldNames, [])
+
+  (function _fillInNameColors() {
+    var unsetNames = _(NS.bulletFieldNames).filter(function(fieldname) { return !NS.bulletFieldColors[fieldname]; })
+    var factor = 0;
+    var step = 1.0 / (unsetNames.length - 1);
+    unsetNames.forEach(function(name) {
+      NS.bulletFieldColors[name] = ybinterp(factor);
+      factor += step;
+    });
+  })();
 
   NS.pairFieldNames = [
     'wyatt_neilson', 'green_greenlee', 'green_domb', 'domb_rizzo', 'greenlee_neilson', 'neilson_rizzo', 'domb_gym', 'wyatt_greenlee', 'greenlee_gym', 'wyatt_cohen', 'green_rizzo', 'steinke_rizzo', 'steinke_goode', 'domb_steinke', 'green_wyatt', 'cohen_gym', 'reynolds_brown_neilson', 'cohen_thomas', 'wyatt_rizzo', 'domb_neilson', 'wyatt_gym', 'domb_wyatt',
@@ -138,8 +149,6 @@ var BulletVotes = BulletVotes || {};
       }
     });
   };
-
-  var ybinterp = d3.interpolateRgb('#F2BA13', '#027EA4');
 
   NS.initDivisionVotesChart = function() {
     NS.divisionVotesChart = c3.generate({

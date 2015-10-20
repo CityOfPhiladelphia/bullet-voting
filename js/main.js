@@ -382,6 +382,10 @@ var BulletVotes = BulletVotes || {};
     document.getElementById('division-candidates-table-wrapper').innerHTML = output;
   };
 
+  NS.getWardTitle = function(ward) {
+    return 'Ward ' + ward;
+  };
+
   NS.isChartsInitialized = false;
   NS.goToWard = function(ward) {
     var sql;
@@ -404,6 +408,10 @@ var BulletVotes = BulletVotes || {};
         NS.initDivisionCandidatesTable();
       }
     };
+
+    if (canPushState()) {
+      window.history.pushState(null, NS.getWardTitle(ward), '#/' + ward);
+    }
 
     BulletVotes.setWardVotesHeader({'ward_display': ward});
     BulletVotes.setWardBulletsHeader({'ward_display': ward});
@@ -471,6 +479,25 @@ var BulletVotes = BulletVotes || {};
         console.log("errors:" + errors);
       });
   };
+
+  NS.wardHashPattern = /^#\/(\d+)$/;
+  NS.divisionHashPattern = /^#\/(\d+)\/(\d+)$/;
+
+  NS.handleHashChange = function() {
+    var hash = window.location.hash;
+    var match;
+
+    if (!hash) {
+      // TODO: Close the stats pane and show the intro
+      return;
+    }
+
+    match = NS.wardHashPattern.exec(hash);
+    if (match) {
+      NS.goToWard(match[1]);
+      return;
+    }
+  };
 })(BulletVotes);
 
 
@@ -505,6 +532,11 @@ function main() {
     // now, perform any operations you need
     // map.setZoom(3)
     // map.setCenter(new google.maps.Latlng(...))
+
+    BulletVotes.handleHashChange();
+    if (canPushState()) {
+      window.onpopstate = BulletVotes.handleHashChange;
+    }
   })
   .error(function(err) {
     console.log(err);

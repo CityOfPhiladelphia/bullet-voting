@@ -135,3 +135,9 @@ dd {
 .pure-menu-selected .pure-menu-link:visited {
 
 }
+
+.c3-bars-Number-of-Voters .c3-bar {
+	stroke: black!important;
+	stroke-opacity: 0.5;
+	stroke-width: 1px;
+}

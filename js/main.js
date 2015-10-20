@@ -82,7 +82,20 @@ var BulletVotes = BulletVotes || {};
         columns: [
           ['Number of Voters', 0, 0, 0, 0, 0, 0]
         ],
-        type: 'bar'
+        type: 'bar',
+        color: function(color, d, undefined) {
+          var colorMap = {
+            0: '#f7f7f7',
+            1: ybinterp(0),
+            2: ybinterp(0.4),
+            3: ybinterp(0.5),
+            4: ybinterp(0.6),
+            5: ybinterp(1)
+          };
+
+          if (d.index !== undefined) { return colorMap[d.index]; }
+          else { return color; }
+        }
       },
       bar: {
         width: {
@@ -118,29 +131,41 @@ var BulletVotes = BulletVotes || {};
     });
   };
 
+  var ybinterp = d3.interpolateRgb('#F2BA13', '#027EA4');
+
   NS.initDivisionVotesChart = function() {
     NS.divisionVotesChart = c3.generate({
       bindto: '#division-votes-chart-wrapper',
       data: {
         columns: [
-          ['0 Chosen', 0],
-          ['1 Chosen', 0],
-          ['2 Chosen', 0],
-          ['3 Chosen', 0],
-          ['4 Chosen', 0],
           ['5 Chosen', 0],
+          ['4 Chosen', 0],
+          ['3 Chosen', 0],
+          ['2 Chosen', 0],
+          ['1 Chosen', 0],
+          ['0 Chosen', 0]
         ],
         groups: [
-          ['0 Chosen', '1 Chosen', '2 Chosen',
-           '3 Chosen', '4 Chosen', '5 Chosen'],
+          [
+            '0 Chosen', '1 Chosen', '2 Chosen',
+            '3 Chosen', '4 Chosen', '5 Chosen'
+          ],
         ],
         type: 'bar',
         order: function(data1, data2) {
           var num1 = data1.id[0];
           var num2 = data2.id[0];
           if (num1 === num2) { return 0; }
-          if (num1 < num2) { return 1; }
-          if (num1 > num2) { return -1; }
+          if (num1 < num2) { return -1; }
+          if (num1 > num2) { return 1; }
+        },
+        colors: {
+          '0 Chosen': '#f7f7f7',
+          '1 Chosen': ybinterp(0),
+          '2 Chosen': ybinterp(0.4),
+          '3 Chosen': ybinterp(0.5),
+          '4 Chosen': ybinterp(0.6),
+          '5 Chosen': ybinterp(1)
         }
       },
       bar: {
@@ -157,6 +182,20 @@ var BulletVotes = BulletVotes || {};
             text: 'Division',
             position: 'outer-center'
           }
+        },
+        y: {
+          tick: {
+            format: d3.format('%')
+          },
+          max: 0.95,
+          padding: 0
+        }
+      },
+      tooltip: {
+        format: {
+          title: function(x) { return 'Division ' + x; },
+          name: function(name, ratio, id, index) { return 'Chose ' + name[0] + ' candidate' + (name[0] != '1' ? 's' : ''); },
+          value: function(value, ratio, id, index) { return d3.format('%')(value); }
         }
       },
       legend: {
@@ -329,10 +368,10 @@ var BulletVotes = BulletVotes || {};
       }
     };
 
-    BulletVotes.setWardVotesHeader({'ward': ward});
-    BulletVotes.setWardBulletsHeader({'ward': ward});
-    BulletVotes.setDivisionVotesHeader({'ward': ward});
-    BulletVotes.setDivisionCandidatesHeader({'ward': ward});
+    BulletVotes.setWardVotesHeader({'ward_display': ward});
+    BulletVotes.setWardBulletsHeader({'ward_display': ward});
+    BulletVotes.setDivisionVotesHeader({'ward_display': ward});
+    BulletVotes.setDivisionCandidatesHeader({'ward_display': ward});
 
     // Fetch from the ward data table and update charts.
     sql = new cartodb.SQL({ user: 'mjumbewu' });

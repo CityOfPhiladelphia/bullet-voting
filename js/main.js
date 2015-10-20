@@ -385,6 +385,8 @@ var BulletVotes = BulletVotes || {};
       row.pairs = _(row.pairs).sortBy('count').reverse();
     });
 
+    data.rows = _(data.rows).sortBy('warddiv');
+
     tpl = document.getElementById('division-candidates-table-tpl').innerHTML;
     output = Mustache.render(tpl, data);
     document.getElementById('division-candidates-table-wrapper').innerHTML = output;

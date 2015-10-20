@@ -532,7 +532,7 @@ var BulletVotes = BulletVotes || {};
 
   NS.createMap = function(callback) {
     // add link to CartoDB viz.json here
-    cartodb.createVis('map', 'https://mjumbewu.cartodb.com/api/v2/viz/416a0320-757a-11e5-8ba1-0e3ff518bd15/viz.json', {
+    cartodb.createVis('map', 'https://mjumbewu.cartodb.com/api/v2/viz/43ccd4e2-7770-11e5-8111-0ecd1babdde5/viz.json', {
         shareable: false ,
         title: false,
         description: false,

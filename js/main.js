@@ -181,6 +181,10 @@ var BulletVotes = BulletVotes || {};
           label: {
             text: 'Division',
             position: 'outer-center'
+          },
+          tick: {
+            // rotate: 90,
+            format: function (x) { return 'Div ' + x; }
           }
         },
         y: {

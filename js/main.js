@@ -545,6 +545,7 @@ function main() {
     // now, perform any operations you need
     // map.setZoom(3)
     // map.setCenter(new google.maps.Latlng(...))
+    map.doubleClickZoom.disable();
 
     BulletVotes.handleHashChange();
     if (canPushState()) {

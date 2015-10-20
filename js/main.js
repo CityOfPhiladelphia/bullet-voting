@@ -511,6 +511,29 @@ var BulletVotes = BulletVotes || {};
       return;
     }
   };
+
+  NS.createMap = function(callback) {
+    // add link to CartoDB viz.json here
+    cartodb.createVis('map', 'https://mjumbewu.cartodb.com/api/v2/viz/416a0320-757a-11e5-8ba1-0e3ff518bd15/viz.json', {
+        shareable: false ,
+        title: false,
+        description: false,
+        search: true,
+        tiles_loader: true,
+        center_lat: 39.9894197,
+        center_lon: -75.1214633,
+        zoom: 11,
+        cartodb_logo: false
+    })
+    .done(function(vis, layers) {
+      NS.map = vis.getNativeMap();
+      callback(vis, layers);
+    })
+    .error(function(err) {
+      console.log(err);
+    });
+  };
+
 })(BulletVotes);
 
 
@@ -519,19 +542,8 @@ function canPushState() {
 }
 
 function main() {
-  // add link to CartoDB viz.json here
-  cartodb.createVis('map', 'https://mjumbewu.cartodb.com/api/v2/viz/416a0320-757a-11e5-8ba1-0e3ff518bd15/viz.json', {
-      shareable: false ,
-      title: false,
-      description: false,
-      search: true,
-      tiles_loader: true,
-      center_lat: 39.9894197,
-      center_lon: -75.1214633,
-      zoom: 11,
-      cartodb_logo: false
-  })
-  .done(function(vis, layers) {
+  BulletVotes.createMap(function(vis, layers) {
+
     // layer 0 is the base layer, layer 1 is cartodb layer
     // setInteraction is disabled by default
     layers[1].setInteraction(true);
@@ -539,6 +551,7 @@ function main() {
       cartodb.log.log(e, pos, latlng, data);
       BulletVotes.goToWard(data.ward);
     });
+
     // you can get the native map to work with it
     // depending if you use google maps or leaflet
     map = vis.getNativeMap();
@@ -551,9 +564,6 @@ function main() {
     if (canPushState()) {
       window.onpopstate = BulletVotes.handleHashChange;
     }
-  })
-  .error(function(err) {
-    console.log(err);
   });
 }
 

@@ -154,7 +154,7 @@ var BulletVotes = BulletVotes || {};
           ['0 Chosen', 0]
         ],
         groups: [
-          [
+          ['x',
             '0 Chosen', '1 Chosen', '2 Chosen',
             '3 Chosen', '4 Chosen', '5 Chosen'
           ],
@@ -191,9 +191,10 @@ var BulletVotes = BulletVotes || {};
             position: 'outer-center'
           },
           tick: {
-            // rotate: 90,
-            format: function (x) { return 'Div ' + x; }
-          }
+            rotate: 90,
+            multiline: false
+          },
+          type: 'category'
         },
         y: {
           tick: {
@@ -205,7 +206,9 @@ var BulletVotes = BulletVotes || {};
       },
       tooltip: {
         format: {
-          title: function(x) { return 'Division ' + x; },
+          title: function(x) {
+            return 'Division ' + BulletVotes.divisionVotesChart.categories()[x];
+          },
           name: function(name, ratio, id, index) { return 'Chose ' + name[0] + ' candidate' + (name[0] != '1' ? 's' : ''); },
           value: function(value, ratio, id, index) { return d3.format('%')(value); }
         }
@@ -300,9 +303,39 @@ var BulletVotes = BulletVotes || {};
     });
   };
 
-  NS.updateDivisionVotesChart = function(values) {
+  NS.updateDivisionVotesChart = function(data) {
+    var values = [[
+      '0 Chosen', '1 Chosen', '2 Chosen',
+      '3 Chosen', '4 Chosen', '5 Chosen'
+    ]];
+    var divisions = _(data.rows).pluck('division');
+
+    data.rows.forEach(function(row) {
+      // Get the total amount of bullet voting for each division
+      var rowTotal = 1 * (row['_0_votes'] || 0) +
+                     1 * (row['_1_votes'] || 0) +
+                     1 * (row['_2_votes'] || 0) +
+                     1 * (row['_3_votes'] || 0) +
+                     1 * (row['_4_votes'] || 0) +
+                     1 * (row['_5_votes'] || 0);
+
+      // Float conversion
+      rowTotal *= 1.0;
+
+      // Collect the scaled values of each division's bullet vote counts
+      values.push([
+        (row['_0_votes'] || 0) / rowTotal,
+        (row['_1_votes'] || 0) / rowTotal,
+        (row['_2_votes'] || 0) / rowTotal,
+        (row['_3_votes'] || 0) / rowTotal,
+        (row['_4_votes'] || 0) / rowTotal,
+        (row['_5_votes'] || 0) / rowTotal,
+      ]);
+    });
+
     NS.divisionVotesChart.load({
-      columns: values
+      rows: values,
+      categories: divisions
     });
   };
 
@@ -385,8 +418,6 @@ var BulletVotes = BulletVotes || {};
       row.pairs = _(row.pairs).sortBy('count').reverse();
     });
 
-    data.rows = _(data.rows).sortBy('warddiv');
-
     tpl = document.getElementById('division-candidates-table-tpl').innerHTML;
     output = Mustache.render(tpl, data);
     document.getElementById('division-candidates-table-wrapper').innerHTML = output;
@@ -458,30 +489,15 @@ var BulletVotes = BulletVotes || {};
       });
 
     // Fetch from the divisions data table and update charts.
-    sql.execute("SELECT *, " +
-      "CAST(_0_votes AS DOUBLE PRECISION) / (_0_votes + _1_votes + _2_votes + _3_votes + _4_votes + _5_votes) AS _0_perc, " +
-      "CAST(_1_votes AS DOUBLE PRECISION) / (_0_votes + _1_votes + _2_votes + _3_votes + _4_votes + _5_votes) AS _1_perc, " +
-      "CAST(_2_votes AS DOUBLE PRECISION) / (_0_votes + _1_votes + _2_votes + _3_votes + _4_votes + _5_votes) AS _2_perc, " +
-      "CAST(_3_votes AS DOUBLE PRECISION) / (_0_votes + _1_votes + _2_votes + _3_votes + _4_votes + _5_votes) AS _3_perc, " +
-      "CAST(_4_votes AS DOUBLE PRECISION) / (_0_votes + _1_votes + _2_votes + _3_votes + _4_votes + _5_votes) AS _4_perc, " +
-      "CAST(_5_votes AS DOUBLE PRECISION) / (_0_votes + _1_votes + _2_votes + _3_votes + _4_votes + _5_votes) AS _5_perc " +
-      "FROM cartodb_query WHERE ward = {{ward}}", {'ward': ward})
+    sql.execute("SELECT * FROM cartodb_query WHERE ward = {{ward}}", {'ward': ward})
       .done(function(data) {
-        var d = data.rows[0];
-        var _0_votes = _(data.rows).pluck('_0_perc');
-        var _1_votes = _(data.rows).pluck('_1_perc');
-        var _2_votes = _(data.rows).pluck('_2_perc');
-        var _3_votes = _(data.rows).pluck('_3_perc');
-        var _4_votes = _(data.rows).pluck('_4_perc');
-        var _5_votes = _(data.rows).pluck('_5_perc');
         _ensureStatsShown();
 
-        // BulletVotes.updateDivisionCandidatesTable(data);
-        BulletVotes.updateDivisionVotesChart([
-          ['0 Chosen'].concat(_0_votes), ['1 Chosen'].concat(_1_votes),
-          ['2 Chosen'].concat(_2_votes), ['3 Chosen'].concat(_3_votes),
-          ['4 Chosen'].concat(_4_votes), ['5 Chosen'].concat(_5_votes),
-        ]);
+        // Both the table and the stacked bar chart expect the rows to be
+        // sorted, so just do it here.
+        data.rows = _(data.rows).sortBy('warddiv');
+
+        BulletVotes.updateDivisionVotesChart(data);
         BulletVotes.updateDivisionCandidatesTable(data);
       })
       .error(function(errors) {

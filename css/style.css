@@ -45,15 +45,17 @@ h1 {
 }
 
 .legend-label {
-	font-size: 0.8rem;
+	font-size: 10px;
+	margin: auto 5px;
 	display: inline-block;
 }
 
 .legend-label-color {
 	display: inline-block;
-	height: 0.7em;
-	width: 0.7em;
-	border: 1px solid #eee;
+	height: 0.6em;
+	width: 0.6em;
+	border: 1px solid #666;
+	border-radius: 0.3em;
 }
 
 dl {

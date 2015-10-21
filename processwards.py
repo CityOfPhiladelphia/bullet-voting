@@ -18,7 +18,7 @@ def finalizeward(wardnum, wardrow, fieldnames, bulletindex, doubleindex, writer,
 
     # Calculate the top bullet and pair getters
     def calculate_tops(start, end=None):
-        votes = wardrow[start:end]
+        votes = [int(v or 0) for v in wardrow[start:end]]
         if not any(votes):
             topcount = 0
             top = None

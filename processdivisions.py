@@ -105,7 +105,7 @@ def process_csvs(incsvfilename, outjsonfilename):
 
                 # Calculate the top bullet and pair getters
                 def calculate_tops(start, end=None):
-                    votes = row[start:end]
+                    votes = [int(v or 0) for v in row[start:end]]
                     if not any(votes):
                         topcount = 0
                         top = None

@@ -28,7 +28,7 @@
 }
 
 /* Just hide divisions with no top_bullet */
-#dem_processed_divisions[top_bullet=""] {
+#rep_processed_divisions[top_bullet=null] {
    polygon-opacity: 0;
 }
 

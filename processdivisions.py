@@ -104,12 +104,23 @@ def process_csvs(incsvfilename, outjsonfilename):
                 row = [0 if v == '\\' else v for v in row]
 
                 # Calculate the top bullet and pair getters
-                topbulletcount = max(row[bulletindex:doubleindex])
-                topbulletindex = row.index(topbulletcount, bulletindex, doubleindex)
-                topbullet = fieldnames[topbulletindex]
-                topdoublecount = max(row[doubleindex:])
-                topdoubleindex = row.index(topdoublecount, doubleindex)
-                topdouble = fieldnames[topdoubleindex]
+                bullets = row[bulletindex:doubleindex]
+                if not any(bullets):
+                    topbulletcount = 0
+                    topbullet = None
+                else:
+                    topbulletcount = max(bullets)
+                    topbulletindex = row.index(topbulletcount, bulletindex, doubleindex)
+                    topbullet = fieldnames[topbulletindex]
+
+                doubles = row[doubleindex:]
+                if not any(doubles):
+                    topdoublecount = 0
+                    topdouble = None
+                else:
+                    topdoublecount = max(doubles)
+                    topdoubleindex = row.index(topdoublecount, doubleindex)
+                    topdouble = fieldnames[topdoubleindex]
 
                 # Output each division's row as it's claculated.
                 outrow = ([ward, division, warddiv, row[0]] +

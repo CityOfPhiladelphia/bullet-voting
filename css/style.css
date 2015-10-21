@@ -133,3 +133,7 @@ dd {
 .pure-menu-selected .pure-menu-link:visited {
 
 }
+
+#content {
+	margin-top: 10px;
+}

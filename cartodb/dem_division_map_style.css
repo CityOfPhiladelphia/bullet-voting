@@ -27,6 +27,11 @@
    polygon-fill: #000000;
 }
 
+/* Just hide divisions with no top_bullet */
+#dem_processed_divisions[top_bullet=""] {
+   polygon-opacity: 0;
+}
+
 #dem_processed_divisions [ top_bullet_scale <= 0.539772727272727] {
    polygon-opacity: 0.9;
 }

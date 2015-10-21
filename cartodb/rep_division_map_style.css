@@ -1,0 +1,55 @@
+#rep_processed_divisions {
+   polygon-opacity: 0.7;
+   line-color: #FFF;
+   line-width: 0.5;
+   line-opacity: 1;
+}
+
+#rep_processed_divisions[top_bullet="Oh"] {
+   polygon-fill: #1F78B4;
+}
+#rep_processed_divisions[top_bullet="O'Brien"] {
+   polygon-fill: #229A00;
+}
+#rep_processed_divisions[top_bullet="Taubenberger"] {
+   polygon-fill: #7B00B4;
+}
+#rep_processed_divisions[top_bullet="Tracy"] {
+   polygon-fill: #E31A1C;
+}
+#rep_processed_divisions[top_bullet="Tinney"] {
+   polygon-fill: #FF7F00;
+}
+#rep_processed_divisions[top_bullet="Wolfe"] {
+   polygon-fill: #e3e31a;
+}
+#rep_processed_divisions {  /* There are only 7, so this is Williams */
+   polygon-fill: #000000;
+}
+
+/* Just hide divisions with no top_bullet */
+#dem_processed_divisions[top_bullet=""] {
+   polygon-opacity: 0;
+}
+
+#rep_processed_divisions [ top_bullet_scale <= 0.444444444444444] {
+   polygon-opacity: 0.9;
+}
+#rep_processed_divisions [ top_bullet_scale <= 0.169811320754717] {
+   polygon-opacity: 0.8;
+}
+#rep_processed_divisions [ top_bullet_scale <= 0.127659574468085] {
+   polygon-opacity: 0.7;
+}
+#rep_processed_divisions [ top_bullet_scale <= 0.1] {
+   polygon-opacity: 0.6;
+}
+#rep_processed_divisions [ top_bullet_scale <= 0.0769230769230769] {
+   polygon-opacity: 0.5;
+}
+#rep_processed_divisions [ top_bullet_scale <= 0.0606060606060606] {
+   polygon-opacity: 0.4;
+}
+#rep_processed_divisions [ top_bullet_scale <= 0.0434782608695652] {
+   polygon-opacity: 0.3;
+}

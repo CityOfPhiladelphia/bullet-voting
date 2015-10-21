@@ -1,50 +1,50 @@
-#cartodb_query {
+#dem_processed_divisions {
    polygon-opacity: 0.7;
    line-color: #FFF;
    line-width: 0.5;
    line-opacity: 1;
 }
 
-#cartodb_query[top_bullet="Domb"] {
+#dem_processed_divisions[top_bullet="Domb"] {
    polygon-fill: #1F78B4;
 }
-#cartodb_query[top_bullet="Green"] {
+#dem_processed_divisions[top_bullet="Green"] {
    polygon-fill: #229A00;
 }
-#cartodb_query[top_bullet="Gym"] {
+#dem_processed_divisions[top_bullet="Gym"] {
    polygon-fill: #7B00B4;
 }
-#cartodb_query[top_bullet="Neilson"] {
+#dem_processed_divisions[top_bullet="Neilson"] {
    polygon-fill: #E31A1C;
 }
-#cartodb_query[top_bullet="Rizzo"] {
+#dem_processed_divisions[top_bullet="Reynolds Brown"] {
    polygon-fill: #FF7F00;
 }
-#cartodb_query[top_bullet="Thomas"] {
+#dem_processed_divisions[top_bullet="Thomas"] {
    polygon-fill: #e3e31a;
 }
-#cartodb_query {
+#dem_processed_divisions {
    polygon-fill: #000000;
 }
 
-#cartodb_query [ top_bullet_scale <= 0.539772727272727] {
+#dem_processed_divisions [ top_bullet_scale <= 0.539772727272727] {
    polygon-opacity: 0.9;
 }
-#cartodb_query [ top_bullet_scale <= 0.128] {
+#dem_processed_divisions [ top_bullet_scale <= 0.128] {
    polygon-opacity: 0.8;
 }
-#cartodb_query [ top_bullet_scale <= 0.0972222222222222] {
+#dem_processed_divisions [ top_bullet_scale <= 0.0972222222222222] {
    polygon-opacity: 0.7;
 }
-#cartodb_query [ top_bullet_scale <= 0.0812182741116751] {
+#dem_processed_divisions [ top_bullet_scale <= 0.0812182741116751] {
    polygon-opacity: 0.6;
 }
-#cartodb_query [ top_bullet_scale <= 0.0656370656370656] {
+#dem_processed_divisions [ top_bullet_scale <= 0.0656370656370656] {
    polygon-opacity: 0.5;
 }
-#cartodb_query [ top_bullet_scale <= 0.0540540540540541] {
+#dem_processed_divisions [ top_bullet_scale <= 0.0540540540540541] {
    polygon-opacity: 0.4;
 }
-#cartodb_query [ top_bullet_scale <= 0.0413223140495868] {
+#dem_processed_divisions [ top_bullet_scale <= 0.0413223140495868] {
    polygon-opacity: 0.3;
 }

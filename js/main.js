@@ -62,7 +62,7 @@ var BulletVotes = BulletVotes || {};
     'domb': '#1F78B4',
     'gym': '#7B00B4',
     'thomas': '#E3E31A',
-    'rizzo': '#FF7F00',
+    'reynolds_brown': '#FF7F00'
   };//_.object(NS.bulletFieldNames, [])
 
   (function _fillInNameColors() {
@@ -539,9 +539,9 @@ var BulletVotes = BulletVotes || {};
     }
   };
 
-  NS.createMap = function(callback) {
+  NS.createMap = function(mapURL, callback) {
     // add link to CartoDB viz.json here
-    cartodb.createVis('map', 'https://mjumbewu.cartodb.com/api/v2/viz/43ccd4e2-7770-11e5-8111-0ecd1babdde5/viz.json', {
+    cartodb.createVis('map', mapURL, {
         shareable: false ,
         title: false,
         description: false,
@@ -569,7 +569,9 @@ function canPushState() {
 }
 
 function main() {
-  BulletVotes.createMap(function(vis, layers) {
+  BulletVotes.createMap(
+    'https://mjumbewu.cartodb.com/api/v2/viz/8d87c8c0-77b7-11e5-b56c-0e31c9be1b51/viz.json',
+    function(vis, layers) {
 
     // layer 0 is the base layer, layer 1 is cartodb layer
     // setInteraction is disabled by default

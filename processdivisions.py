@@ -111,8 +111,13 @@ def process_csvs(incsvfilename, outjsonfilename):
                         top = None
                     else:
                         topcount = max(votes)
-                        topindex = row.index(topcount, *(start, end) if end else (start,))
-                        top = fieldnames[topindex]
+                        topindicies = [start + i for i, c in enumerate(votes) if c == topcount]
+                        is_tie = (len(topindicies) > 1)
+                        if not is_tie:
+                            topindex = topindicies[0]
+                            top = fieldnames[topindex]
+                        elif is_tie:
+                            top = 'Tie: ' + '/'.join(fieldnames[i] for i in topindicies)
                     return top, topcount
 
                 topbullet, topbulletcount = calculate_tops(bulletindex, doubleindex)

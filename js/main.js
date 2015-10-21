@@ -569,10 +569,15 @@ function canPushState() {
 }
 
 function main() {
+  var currentParty = document.querySelector('#parties dd.active').dataset.party;
+  var vizUrls = {
+    democratic: 'https://mjumbewu.cartodb.com/api/v2/viz/416a0320-757a-11e5-8ba1-0e3ff518bd15/viz.json',
+    republican: 'https://mjumbewu.cartodb.com/api/v2/viz/416a0320-757a-11e5-8ba1-0e3ff518bd15/viz.json'
+  };
+  
   BulletVotes.createMap(
-    'https://mjumbewu.cartodb.com/api/v2/viz/8d87c8c0-77b7-11e5-b56c-0e31c9be1b51/viz.json',
+    vizUrls[currentParty] || vizUrls.democratic,
     function(vis, layers) {
-
     // layer 0 is the base layer, layer 1 is cartodb layer
     // setInteraction is disabled by default
     layers[1].setInteraction(true);

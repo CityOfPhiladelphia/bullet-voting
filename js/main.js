@@ -311,8 +311,14 @@ function canPushState() {
 }
 
 function main() {
+  var currentParty = document.querySelector('#parties dd.active').dataset.party;
+  var vizUrls = {
+    democratic: 'https://mjumbewu.cartodb.com/api/v2/viz/416a0320-757a-11e5-8ba1-0e3ff518bd15/viz.json',
+    republican: 'https://mjumbewu.cartodb.com/api/v2/viz/416a0320-757a-11e5-8ba1-0e3ff518bd15/viz.json'
+  };
+  
   // add link to CartoDB viz.json here
-  cartodb.createVis('map', 'https://mjumbewu.cartodb.com/api/v2/viz/416a0320-757a-11e5-8ba1-0e3ff518bd15/viz.json', {
+  cartodb.createVis('map', vizUrls[currentParty] || vizUrls.democratic, {
       shareable: false ,
       title: false,
       description: false,

@@ -17,23 +17,19 @@ def finalizeward(wardnum, wardrow, fieldnames, bulletindex, doubleindex, writer,
     cleanward = '{:0>2}'.format(wardnum)
 
     # Calculate the top bullet and pair getters
-    bullets = wardrow[bulletindex:doubleindex]
-    if not any(bullets):
-        topbulletcount = 0
-        topbullet = None
-    else:
-        topbulletcount = max(bullets)
-        topbulletindex = wardrow.index(topbulletcount, bulletindex, doubleindex)
-        topbullet = fieldnames[topbulletindex]
+    def calculate_tops(start, end=None):
+        votes = wardrow[start:end]
+        if not any(votes):
+            topcount = 0
+            top = None
+        else:
+            topcount = max(votes)
+            topindex = wardrow.index(topcount, *(start, end) if end else (start,))
+            top = fieldnames[topindex]
+        return top, topcount
 
-    doubles = wardrow[doubleindex:]
-    if not any(doubles):
-        topdoublecount = 0
-        topdouble = None
-    else:
-        topdoublecount = max(doubles)
-        topdoubleindex = wardrow.index(topdoublecount, doubleindex)
-        topdouble = fieldnames[topdoubleindex]
+    topbullet, topbulletcount = calculate_tops(bulletindex, doubleindex)
+    topdouble, topdoublecount = calculate_tops(doubleindex)
 
     # Output each ward's row as it's claculated.
     outrow = ([wardnum, cleanward] +

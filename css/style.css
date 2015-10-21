@@ -23,12 +23,16 @@ table td{
 	text-align: center;
 }
 
-p {
-	color: #9299A5;
-}
-
 h1 {
 	margin-top: -5px!important;
+}
+
+#intro p {
+	font-size: 1.25rem;
+}
+
+#parties {
+	margin-top: 10px;
 }
 
 #stats h2 {
@@ -45,15 +49,17 @@ h1 {
 }
 
 .legend-label {
-	font-size: 0.8rem;
+	font-size: 10px;
+	margin: auto 5px;
 	display: inline-block;
 }
 
 .legend-label-color {
 	display: inline-block;
-	height: 0.7em;
-	width: 0.7em;
-	border: 1px solid #eee;
+	height: 0.6em;
+	width: 0.6em;
+	border: 1px solid #666;
+	border-radius: 0.3em;
 }
 
 dl {
@@ -134,6 +140,20 @@ dd {
 
 }
 
-#content {
-	margin-top: 10px;
+#division-candidates-table-wrapper td:first-child {
+	text-decoration: italic;
+	font-weight: bold;
+	text-align: center;
+}
+
+#division-candidates-table-wrapper td li {
+	font-size: 0.75rem;
+}
+
+/* === SVG chart styles === */
+
+.c3-bars-Number-of-Voters .c3-bar {
+	stroke: black!important;
+	stroke-opacity: 0.5;
+	stroke-width: 1px;
 }

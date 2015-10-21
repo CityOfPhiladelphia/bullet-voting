@@ -75,9 +75,42 @@
         </div>
       {{/labels}}
     </script>
+
+    <script id="division-candidates-table-tpl" type="text/html">
+      <table>
+        <thead>
+          <tr>
+            <th>Division</th>
+            <th>Bullets</th>
+            <th>Pairs</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          {{#rows}}
+          <tr id="division-candidates-row-{{warddiv}}" data-ward="{{ward}}" data-division="{{division}}">
+            <td>{{ward_divis}}</td>
+            <td><ol>{{#bullets}}<li>{{label}} ({{count}} votes)</li>{{/bullets}}</ol></td>
+            <td><ol>{{#pairs}}<li>{{label}} ({{count}})</li>{{/pairs}}</ol></td>
+          </tr>
+          {{/rows}}
+        </tbody>
+      </table>
+    </script>
   </head>
 
   <body>
+
+    <!-- Google Tag Manager [phila.gov] -->
+    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-MC6CR2"
+    height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+    })(window,document,'script','dataLayer','GTM-MC6CR2');</script>
+    <!-- End Google Tag Manager -->
+
     <div class="full" id="application">
 
     <!-- Begin .header -->
@@ -85,7 +118,7 @@
       <div class="row">
         <div class="small-24 medium-24 column">
           <a href="http://alpha.phila.gov"><img src="//cityofphiladelphia.github.io/patterns/images/city-of-philadelphia-logo.png" class="logo" alt="City of Philadelphia"></a>
-    
+
           <h1 class="page-title"><a href="#">Bullet Voting in Philadelphia</a></h1>
           <h1 class="site-title">phila.gov</h1>
           <h2 class="site-description">City of Philadelphia</h2>
@@ -120,52 +153,53 @@
 
     </div>
     <div class="large-12 columns">
-      <aside id="content" class="related" role="complementary">
+      <div id="intro">
 
-        <div id="intro">
-          <h3>What is Bullet Voting?</h3>
-          <p>Each voter is allowed 5 choices for City Council candidates. Many voters choose fewer than 5. When a voter only chooses one candidate, it is known as “bullet voting”.</p>
-          <p>Click a ward in the map to see more information.</p>
+        <h2>What is Bullet Voting?</h3>
+        <p>Each voter is allowed 5 choices for City Council candidates. Many voters choose fewer than 5. When a voter only chooses one candidate, it is known as “bullet voting”.</p>
+
+        <div data-alert class="alert-box info">
+          <p><i class="fa fa-arrow-circle-left"></i> Click a ward in the map to see more information.</p>
         </div>
+
+      </div>
   
-        <div id="parties">      
-          <dl class="sub-nav">
-            <dt>Races:</dt>
-            <dd class="active" data-party="democratic"><a href="#">Democratic</a></dd>
-            <dd data-party="republican"><a href="republican.html">Republican</a></dd>
-          </dl>
-        </div>
+      <div id="parties">      
+        <dl class="sub-nav">
+          <dt>Races:</dt>
+          <dd class="active" data-party="democratic"><a href="#">Democratic</a></dd>
+          <dd data-party="republican"><a href="republican.html">Republican</a></dd>
+        </dl>
+      </div>
 
-        <!-- Ward-specifc Content -->
-        <div id="stats" class="hide">
+      <!-- Ward-specifc Content -->
+      <div id="stats" class="hide">
 
-          <h2>How Many Candidates Did Voters Choose?</h2>
+        <h2>How Many Candidates Did Voters Choose?</h2>
 
-          <h3 id="ward-votes-header"></h3>
-          <div id="ward-votes-chart-wrapper"></div>
+        <h3 id="ward-votes-header"></h3>
+        <div id="ward-votes-chart-wrapper"></div>
 
-          <h3 id="division-votes-header"></h3>
-          <div id="division-votes-chart-wrapper"></div>
+        <h3 id="division-votes-header"></h3>
+        <div id="division-votes-chart-wrapper"></div>
 
-          <h2>Who Got the Most Bullet Votes?</h2>
-          <h3 id="ward-bullets-header"></h3>
-          <div class="row">
-            <div class="small-12 columns">
-              <div id="ward-bullets-chart-wrapper"></div>
-              <div id="ward-bullets-legend" class="ward-donut-legend"></div>
-            </div>
-            <div class="small-12 columns">
-              <div id="ward-pairs-chart-wrapper"></div>
-              <div id="ward-pairs-legend" class="ward-donut-legend"></div>
-            </div>
+        <h2>Who Got the Most Bullet Votes?</h2>
+        <h3 id="ward-bullets-header"></h3>
+        <div class="row">
+          <div class="small-12 columns">
+            <div id="ward-bullets-chart-wrapper"></div>
+            <div id="ward-bullets-legend" class="ward-donut-legend"></div>
           </div>
-
-          <h3 id="division-candidates-header"></h3>
-          <div id="division-candidates-chart-wrapper"></div>
-
+          <div class="small-12 columns">
+            <div id="ward-pairs-chart-wrapper"></div>
+            <div id="ward-pairs-legend" class="ward-donut-legend"></div>
+          </div>
         </div>
 
-      </aside>
+        <h3 id="division-candidates-header"></h3>
+        <div id="division-candidates-table-wrapper"></div>
+
+      </div>
     </div>
   </div>
 </article>

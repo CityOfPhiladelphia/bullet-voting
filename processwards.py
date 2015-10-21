@@ -1,5 +1,7 @@
 #!/usr/bin/env python
 
+from __future__ import print_function
+
 import csv
 import click
 import json
@@ -15,12 +17,24 @@ def finalizeward(wardnum, wardrow, fieldnames, bulletindex, doubleindex, writer,
     cleanward = '{:0>2}'.format(wardnum)
 
     # Calculate the top bullet and pair getters
-    topbulletcount = max(wardrow[bulletindex:doubleindex])
-    topbulletindex = wardrow.index(topbulletcount, bulletindex, doubleindex)
-    topbullet = fieldnames[topbulletindex]
-    topdoublecount = max(wardrow[doubleindex:])
-    topdoubleindex = wardrow.index(topdoublecount, doubleindex)
-    topdouble = fieldnames[topdoubleindex]
+    def calculate_tops(start, end=None):
+        votes = [int(v or 0) for v in wardrow[start:end]]
+        if not any(votes):
+            topcount = 0
+            top = None
+        else:
+            topcount = max(votes)
+            topindicies = [start + i for i, c in enumerate(votes) if c == topcount]
+            is_tie = (len(topindicies) > 1)
+            if not is_tie:
+                topindex = topindicies[0]
+                top = fieldnames[topindex]
+            elif is_tie:
+                top = 'Tie: ' + '/'.join(fieldnames[i] for i in topindicies)
+        return top, topcount
+
+    topbullet, topbulletcount = calculate_tops(bulletindex, doubleindex)
+    topdouble, topdoublecount = calculate_tops(doubleindex)
 
     # Output each ward's row as it's claculated.
     outrow = ([wardnum, cleanward] +
@@ -35,9 +49,9 @@ def finalizeward(wardnum, wardrow, fieldnames, bulletindex, doubleindex, writer,
 
 
 @click.command()
-@click.argument('files', nargs=-1, type=click.Path())
-def process_csvs(files):
-    for filename in files:
+@click.argument('incsvfilename', nargs=1, type=click.Path())
+@click.argument('outjsonfilename', nargs=1, type=click.Path())
+def process_csvs(incsvfilename, outjsonfilename):
         with open(pathjoin(ROOT, 'data', 'GIS_PLANNING.Political_Wards.geojson')) as jsonfile:
             # Index the wards by ward number
             wards_geojson = json.load(jsonfile)
@@ -46,7 +60,7 @@ def process_csvs(files):
                 for feature in wards_geojson['features']
             }
 
-        with open(filename, 'rU') as csvfile:
+        with open(incsvfilename, 'rU') as csvfile:
             # Start reading in as a CSV file
             reader = csv.reader(csvfile)
 
@@ -106,8 +120,13 @@ def process_csvs(files):
                 if wardrow is None:
                     wardrow = row[1:]
                 else:
-                    wardrow = [int(sumv or 0) + int(v or 0)
-                               for sumv, v in zip(wardrow, row[1:])]
+                    try:
+                        wardrow = [int(sumv or 0) + int(v or 0)
+                                   for sumv, v in zip(wardrow, row[1:])]
+                    except Exception as e:
+                        print('\nError while processing row {} -- {}: {}'.format(
+                            row, type(e).__name__, e), file=sys.stderr)
+                        sys.exit(1)
 
                 # After we've reached the last row in the ward, calculate the
                 # top bullets and pairs.
@@ -129,7 +148,7 @@ def process_csvs(files):
             data['features'].append(feature)
 
             # Save the geojson file
-            with open(pathjoin(ROOT, 'data', 'dem_processed_wards.geojson'), 'w') as jsonfile:
+            with open(outjsonfilename, 'w') as jsonfile:
                 json.dump(data, jsonfile)
 
 

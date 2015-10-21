@@ -2,12 +2,20 @@ var BulletVotes = BulletVotes || {};
 
 (function(NS) {
 
+  NS.showIntro = function() {
+    document.getElementById('intro').classList.remove('hide');
+  };
+
   NS.hideIntro = function() {
     document.getElementById('intro').classList.add('hide');
   };
 
   NS.showStats = function() {
     document.getElementById('stats').classList.remove('hide');
+  };
+
+  NS.hideStats = function() {
+    document.getElementById('stats').classList.add('hide');
   };
 
   NS.setWardVotesHeader = function(tcontext) {
@@ -34,6 +42,8 @@ var BulletVotes = BulletVotes || {};
     document.getElementById('division-candidates-header').innerHTML = output;
   };
 
+  var ybinterp = d3.interpolateRgb('#F2BA13', '#027EA4');
+
   // NOTE: Hard-coding these cadidate values is not ideal, but is easiest for
   // now.
   NS.bulletFieldNames = [
@@ -47,14 +57,23 @@ var BulletVotes = BulletVotes || {};
     'Thomas', 'Greenlee', 'Cain', 'Ayers', 'Write in', 'Other'
   ]);
   NS.bulletFieldColors = {
-    'domb': '#a6761d',
-    'green': '#1f78b4',
-    'greenlee': '#e7298a',
-    'gym': '#33a02c',
-    'neilson': '#d95f02',
-    'rizzo': '#e31a1c',
-    'thomas': '#fdbf6f'
+    'green': '#229A00',
+    'neilson': '#E31A1C',
+    'domb': '#1F78B4',
+    'gym': '#7B00B4',
+    'thomas': '#E3E31A',
+    'reynolds_brown': '#FF7F00'
   };//_.object(NS.bulletFieldNames, [])
+
+  (function _fillInNameColors() {
+    var unsetNames = _(NS.bulletFieldNames).filter(function(fieldname) { return !NS.bulletFieldColors[fieldname]; })
+    var factor = 0;
+    var step = 1.0 / (unsetNames.length - 1);
+    unsetNames.forEach(function(name) {
+      NS.bulletFieldColors[name] = ybinterp(factor);
+      factor += step;
+    });
+  })();
 
   NS.pairFieldNames = [
     'wyatt_neilson', 'green_greenlee', 'green_domb', 'domb_rizzo', 'greenlee_neilson', 'neilson_rizzo', 'domb_gym', 'wyatt_greenlee', 'greenlee_gym', 'wyatt_cohen', 'green_rizzo', 'steinke_rizzo', 'steinke_goode', 'domb_steinke', 'green_wyatt', 'cohen_gym', 'reynolds_brown_neilson', 'cohen_thomas', 'wyatt_rizzo', 'domb_neilson', 'wyatt_gym', 'domb_wyatt',
@@ -82,7 +101,20 @@ var BulletVotes = BulletVotes || {};
         columns: [
           ['Number of Voters', 0, 0, 0, 0, 0, 0]
         ],
-        type: 'bar'
+        type: 'bar',
+        color: function(color, d, undefined) {
+          var colorMap = {
+            0: '#f7f7f7',
+            1: ybinterp(0),
+            2: ybinterp(0.4),
+            3: ybinterp(0.5),
+            4: ybinterp(0.6),
+            5: ybinterp(1)
+          };
+
+          if (d.index !== undefined) { return colorMap[d.index]; }
+          else { return color; }
+        }
       },
       bar: {
         width: {
@@ -109,6 +141,85 @@ var BulletVotes = BulletVotes || {};
       tooltip: {
         format: {
           title: function(x) { return x + '&nbsp;candidate' + (x != 1 ? 's' : ''); }
+        }
+      },
+      legend: {
+        show: false,
+        hide: true
+      }
+    });
+  };
+
+  NS.initDivisionVotesChart = function() {
+    NS.divisionVotesChart = c3.generate({
+      bindto: '#division-votes-chart-wrapper',
+      data: {
+        columns: [
+          ['5 Chosen', 0],
+          ['4 Chosen', 0],
+          ['3 Chosen', 0],
+          ['2 Chosen', 0],
+          ['1 Chosen', 0],
+          ['0 Chosen', 0]
+        ],
+        groups: [
+          ['x',
+            '0 Chosen', '1 Chosen', '2 Chosen',
+            '3 Chosen', '4 Chosen', '5 Chosen'
+          ],
+        ],
+        type: 'bar',
+        order: function(data1, data2) {
+          var num1 = data1.id[0];
+          var num2 = data2.id[0];
+          if (num1 === num2) { return 0; }
+          if (num1 < num2) { return -1; }
+          if (num1 > num2) { return 1; }
+        },
+        colors: {
+          '0 Chosen': '#f7f7f7',
+          '1 Chosen': ybinterp(0),
+          '2 Chosen': ybinterp(0.4),
+          '3 Chosen': ybinterp(0.5),
+          '4 Chosen': ybinterp(0.6),
+          '5 Chosen': ybinterp(1)
+        }
+      },
+      bar: {
+        width: {
+          ratio: 1.1 // this makes bar width 50% of length between ticks
+        }
+      },
+      size: {
+        height: 200
+      },
+      axis: {
+        x: {
+          label: {
+            text: 'Division',
+            position: 'outer-center'
+          },
+          tick: {
+            rotate: 90,
+            multiline: false
+          },
+          type: 'category'
+        },
+        y: {
+          tick: {
+            format: d3.format('%')
+          },
+          max: 0.95,
+          padding: 0
+        }
+      },
+      tooltip: {
+        format: {
+          title: function(x) {
+            return 'Division ' + BulletVotes.divisionVotesChart.categories()[x];
+          },
+          name: function(name, ratio, id, index) { return 'Chose ' + name[0] + ' candidate' + (name[0] != '1' ? 's' : ''); },
+          value: function(value, ratio, id, index) { return d3.format('%')(value); }
         }
       },
       legend: {
@@ -189,11 +300,51 @@ var BulletVotes = BulletVotes || {};
     NS.pairFieldColors = NS.wardPairsChart.data.colors();
   };
 
+  NS.initDivisionCandidatesTable = function() {
+    // Nothing to do here for now.
+  };
+
   NS.updateWardVotesChart = function(values) {
     NS.wardVotesChart.load({
       columns: [
         ['Number of Voters'].concat(values)
       ]
+    });
+  };
+
+  NS.updateDivisionVotesChart = function(data) {
+    var values = [[
+      '0 Chosen', '1 Chosen', '2 Chosen',
+      '3 Chosen', '4 Chosen', '5 Chosen'
+    ]];
+    var divisions = _(data.rows).pluck('division');
+
+    data.rows.forEach(function(row) {
+      // Get the total amount of bullet voting for each division
+      var rowTotal = 1 * (row['_0_votes'] || 0) +
+                     1 * (row['_1_votes'] || 0) +
+                     1 * (row['_2_votes'] || 0) +
+                     1 * (row['_3_votes'] || 0) +
+                     1 * (row['_4_votes'] || 0) +
+                     1 * (row['_5_votes'] || 0);
+
+      // Float conversion
+      rowTotal *= 1.0;
+
+      // Collect the scaled values of each division's bullet vote counts
+      values.push([
+        (row['_0_votes'] || 0) / rowTotal,
+        (row['_1_votes'] || 0) / rowTotal,
+        (row['_2_votes'] || 0) / rowTotal,
+        (row['_3_votes'] || 0) / rowTotal,
+        (row['_4_votes'] || 0) / rowTotal,
+        (row['_5_votes'] || 0) / rowTotal,
+      ]);
+    });
+
+    NS.divisionVotesChart.load({
+      rows: values,
+      categories: divisions
     });
   };
 
@@ -253,33 +404,76 @@ var BulletVotes = BulletVotes || {};
     });
   };
 
+  NS.updateDivisionCandidatesTable = function(data) {
+    var tpl, output;
+
+    data.rows.forEach(function(row) {
+      row.bullets = [];
+      row.pairs = [];
+
+      NS.bulletFieldNames.forEach(function(fieldname) {
+        if (row[fieldname]) {
+          row.bullets.push({label: NS.bulletFieldLabels[fieldname], count: row[fieldname]});
+        }
+      });
+
+      NS.pairFieldNames.forEach(function(fieldname) {
+        if (row[fieldname]) {
+          row.pairs.push({label: NS.pairFieldLabels[fieldname], count: row[fieldname]});
+        }
+      });
+
+      row.bullets = _(row.bullets).sortBy('count').reverse();
+      row.pairs = _(row.pairs).sortBy('count').reverse();
+    });
+
+    tpl = document.getElementById('division-candidates-table-tpl').innerHTML;
+    output = Mustache.render(tpl, data);
+    document.getElementById('division-candidates-table-wrapper').innerHTML = output;
+  };
+
+  NS.getWardTitle = function(ward) {
+    return 'Ward ' + ward;
+  };
+
   NS.isChartsInitialized = false;
   NS.goToWard = function(ward) {
-    var sql = new cartodb.SQL({ user: 'mjumbewu' });
-    sql.execute("SELECT * FROM political_wards_merge WHERE ward = {{ward}}", {'ward': ward})
+    var sql;
+    var _ensureStatsShown = function() {
+      BulletVotes.hideIntro();
+      BulletVotes.showStats();
+
+      // We don't want to initialize the charts until after the stats
+      // container is visible, because the charts need the size of the
+      // container to be calculated.
+      //
+      // TODO: Think about doing this off-screen so that we don't have to
+      // actually show the stats section before it's all ready.
+      if (!NS.isChartsInitialized) {
+        NS.isChartsInitialized = true;
+        NS.initWardVotesChart();
+        NS.initDivisionVotesChart();
+        NS.initWardBulletsChart();
+        NS.initWardPairsChart();
+        NS.initDivisionCandidatesTable();
+      }
+    };
+
+    if (canPushState() && window.location.hash != ('#/' + ward)) {
+      window.history.pushState(null, NS.getWardTitle(ward), '#/' + ward);
+    }
+
+    BulletVotes.setWardVotesHeader({'ward_display': ward});
+    BulletVotes.setWardBulletsHeader({'ward_display': ward});
+    BulletVotes.setDivisionVotesHeader({'ward_display': ward});
+    BulletVotes.setDivisionCandidatesHeader({'ward_display': ward});
+
+    // Fetch from the ward data table and update charts.
+    sql = new cartodb.SQL({ user: 'mjumbewu' });
+    sql.execute("SELECT * FROM political_wards_merge WHERE ward = {{ward}} LIMIT 1", {'ward': ward})
       .done(function(data) {
         var d = data.rows[0];
-
-        BulletVotes.hideIntro();
-        BulletVotes.showStats();
-
-        // We don't want to initialize the charts until after the stats
-        // container is visible, because the charts need the size of the
-        // container to be calculated.
-        //
-        // TODO: Think about doing this off-screen so that we don't have to
-        // actually show the stats section before it's all ready.
-        if (!NS.isChartsInitialized) {
-          NS.isChartsInitialized = true;
-          NS.initWardVotesChart();
-          NS.initWardBulletsChart();
-          NS.initWardPairsChart();
-        }
-
-        BulletVotes.setWardVotesHeader(d);
-        BulletVotes.setWardBulletsHeader(d);
-        BulletVotes.setDivisionVotesHeader(d);
-        BulletVotes.setDivisionCandidatesHeader(d);
+        _ensureStatsShown();
 
         BulletVotes.updateWardVotesChart([
           d['_0_votes'], d['_1_votes'], d['_2_votes'],
@@ -302,7 +496,71 @@ var BulletVotes = BulletVotes || {};
         // errors contains a list of errors
         console.log("errors:" + errors);
       });
+
+    // Fetch from the divisions data table and update charts.
+    sql.execute("SELECT * FROM cartodb_query WHERE ward = {{ward}}", {'ward': ward})
+      .done(function(data) {
+        _ensureStatsShown();
+
+        // Both the table and the stacked bar chart expect the rows to be
+        // sorted, so just do it here.
+        data.rows = _(data.rows).sortBy('warddiv');
+
+        BulletVotes.updateDivisionVotesChart(data);
+        BulletVotes.updateDivisionCandidatesTable(data);
+      })
+      .error(function(errors) {
+        // errors contains a list of errors
+        console.log("errors:" + errors);
+      });
   };
+
+  NS.closeWardStats = function() {
+    BulletVotes.showIntro();
+    BulletVotes.hideStats();
+  };
+
+  NS.wardHashPattern = /^#\/(\d+)$/;
+  NS.divisionHashPattern = /^#\/(\d+)\/(\d+)$/;
+
+  NS.handleHashChange = function() {
+    var hash = window.location.hash;
+    var match;
+
+    if (!hash) {
+      NS.closeWardStats();
+      return;
+    }
+
+    match = NS.wardHashPattern.exec(hash);
+    if (match) {
+      NS.goToWard(match[1]);
+      return;
+    }
+  };
+
+  NS.createMap = function(mapURL, callback) {
+    // add link to CartoDB viz.json here
+    cartodb.createVis('map', mapURL, {
+        shareable: false ,
+        title: false,
+        description: false,
+        search: true,
+        tiles_loader: true,
+        center_lat: 39.9894197,
+        center_lon: -75.1214633,
+        zoom: 11,
+        cartodb_logo: false
+    })
+    .done(function(vis, layers) {
+      NS.map = vis.getNativeMap();
+      callback(vis, layers);
+    })
+    .error(function(err) {
+      console.log(err);
+    });
+  };
+
 })(BulletVotes);
 
 
@@ -317,36 +575,29 @@ function main() {
     republican: 'https://mjumbewu.cartodb.com/api/v2/viz/416a0320-757a-11e5-8ba1-0e3ff518bd15/viz.json'
   };
   
-  // add link to CartoDB viz.json here
-  cartodb.createVis('map', vizUrls[currentParty] || vizUrls.democratic, {
-      shareable: false ,
-      title: false,
-      description: false,
-      search: true,
-      tiles_loader: true,
-      center_lat: 39.9894197,
-      center_lon: -75.1214633,
-      zoom: 11,
-      cartodb_logo: false
-  })
-  .done(function(vis, layers) {
+  BulletVotes.createMap(
+    vizUrls[currentParty] || vizUrls.democratic,
+    function(vis, layers) {
     // layer 0 is the base layer, layer 1 is cartodb layer
     // setInteraction is disabled by default
     layers[1].setInteraction(true);
     layers[1].on('featureClick', function(e, pos, latlng, data) {
       cartodb.log.log(e, pos, latlng, data);
       BulletVotes.goToWard(data.ward);
-
     });
+
     // you can get the native map to work with it
     // depending if you use google maps or leaflet
     map = vis.getNativeMap();
     // now, perform any operations you need
     // map.setZoom(3)
     // map.setCenter(new google.maps.Latlng(...))
-  })
-  .error(function(err) {
-    console.log(err);
+    map.doubleClickZoom.disable();
+
+    BulletVotes.handleHashChange();
+    if (canPushState()) {
+      window.onpopstate = BulletVotes.handleHashChange;
+    }
   });
 }
 

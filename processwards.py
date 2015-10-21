@@ -1,5 +1,7 @@
 #!/usr/bin/env python
 
+from __future__ import print_function
+
 import csv
 import click
 import json
@@ -106,8 +108,13 @@ def process_csvs(incsvfilename, outjsonfilename):
                 if wardrow is None:
                     wardrow = row[1:]
                 else:
-                    wardrow = [int(sumv or 0) + int(v or 0)
-                               for sumv, v in zip(wardrow, row[1:])]
+                    try:
+                        wardrow = [int(sumv or 0) + int(v or 0)
+                                   for sumv, v in zip(wardrow, row[1:])]
+                    except Exception as e:
+                        print('\nError while processing row {} -- {}: {}'.format(
+                            row, type(e).__name__, e), file=sys.stderr)
+                        sys.exit(1)
 
                 # After we've reached the last row in the ward, calculate the
                 # top bullets and pairs.

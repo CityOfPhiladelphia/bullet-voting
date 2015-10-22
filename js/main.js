@@ -48,12 +48,23 @@ var BulletVotes = BulletVotes || {};
   // Populate the candiadate name colors that aren't explicitly set with values
   // between the alpha.phila.gov yellow and blue.
   NS._fillInNameColors = function() {
+    NS.bulletFieldColors = NS.bulletFieldColors || {};
     var unsetNames = _(NS.bulletFieldNames).filter(function(fieldname) { return !NS.bulletFieldColors[fieldname]; })
     var factor = 0;
     var step = 1.0 / (unsetNames.length - 1);
     unsetNames.forEach(function(name) {
       NS.bulletFieldColors[name] = grayinterp(factor);
       factor += step;
+    });
+  };
+  NS._fillInPairColors = function() {
+    NS.pairFieldColors = NS.pairFieldColors || {};
+    var unsetNames = _(NS.pairFieldNames).filter(function(fieldname) { return !NS.pairFieldColors[fieldname]; })
+    var huefactor = 0;
+    var huestep = 360.0 / (unsetNames.length - 1);
+    _(unsetNames).shuffle().forEach(function(name) {
+      NS.pairFieldColors[name] = d3.hsl(huefactor, 1, 0.375);
+      huefactor += huestep;
     });
   };
 
@@ -240,6 +251,7 @@ var BulletVotes = BulletVotes || {};
           return [fieldname, 0];
         })/*.concat([['other', 0]])*/,
         names: BulletVotes.pairFieldLabels,
+        colors: BulletVotes.pairFieldColors,
         order: null
       },
       donut: {
@@ -572,6 +584,7 @@ function main() {
   }
 
   BulletVotes._fillInNameColors();
+  BulletVotes._fillInPairColors();
 
   BulletVotes.createMap(
     function(vis, layers) {

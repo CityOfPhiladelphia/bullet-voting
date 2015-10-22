@@ -472,7 +472,7 @@ var BulletVotes = BulletVotes || {};
 
     // Fetch from the ward data table and update charts.
     sql = new cartodb.SQL({ user: 'mjumbewu' });
-    sql.execute("SELECT * FROM dem_processed_wards WHERE ward = '{{ward}}' LIMIT 1", {'ward': ward})
+    sql.execute("SELECT * FROM " + BulletVotes.wardsTable + " WHERE ward = '{{ward}}' LIMIT 1", {'ward': ward})
       .done(function(data) {
         var d = data.rows[0];
         _ensureStatsShown();
@@ -500,7 +500,7 @@ var BulletVotes = BulletVotes || {};
       });
 
     // Fetch from the divisions data table and update charts.
-    sql.execute("SELECT * FROM dem_processed_divisions WHERE ward = '{{ward}}'", {'ward': ward})
+    sql.execute("SELECT * FROM " + BulletVotes.divisionsTable + " WHERE ward = '{{ward}}'", {'ward': ward})
       .done(function(data) {
         _ensureStatsShown();
 
@@ -573,6 +573,14 @@ function canPushState() {
 function main() {
   if (!BulletVotes.cartodbURL) {
     throw "Configuration Error: No cartodb URL has been set. Please set the BulletVotes.cartodbURL to the api URL for the map. Thanks!";
+  }
+
+  if (!BulletVotes.wardsTable) {
+    throw "Configuration Error: No wards table name has been set. Please set the BulletVotes.wardsTable. Thanks!";
+  }
+
+  if (!BulletVotes.divisionsTable) {
+    throw "Configuration Error: No divisions table name has been set. Please set the BulletVotes.divisionsTable. Thanks!";
   }
 
   BulletVotes.createMap(

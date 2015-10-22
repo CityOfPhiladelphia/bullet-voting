@@ -21,10 +21,10 @@
    polygon-fill: #FF7F00;
 }
 #rep_processed_divisions[top_bullet="Wolfe"] {
-   polygon-fill: #e3e31a;
+   polygon-fill: #000000;
 }
 #rep_processed_divisions {  /* There are only 7, so this is Williams */
-   polygon-fill: #000000;
+   polygon-fill: #e3e31a;
 }
 
 /* Color ties gray */

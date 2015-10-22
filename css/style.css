@@ -92,7 +92,7 @@ dd {
 
 #map {
 	width: 100%;
-	height:100%;
+	height: 60%;
 	padding: 0;
 	margin: 0;
 	overflow: hidden;
@@ -166,6 +166,10 @@ nav.top-bar .top-bar-section label {
 		background: #fff;
 		line-height: 2.1875rem;
 		padding: 0 1.09375rem;
+	}
+
+	#map {
+		height: 100%;
 	}
 }
 

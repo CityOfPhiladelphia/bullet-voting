@@ -470,7 +470,7 @@ var BulletVotes = BulletVotes || {};
 
     // Fetch from the ward data table and update charts.
     sql = new cartodb.SQL({ user: 'mjumbewu' });
-    sql.execute("SELECT * FROM political_wards_merge WHERE ward = {{ward}} LIMIT 1", {'ward': ward})
+    sql.execute("SELECT * FROM dem_processed_wards WHERE ward = '{{ward}}' LIMIT 1", {'ward': ward})
       .done(function(data) {
         var d = data.rows[0];
         _ensureStatsShown();
@@ -498,7 +498,7 @@ var BulletVotes = BulletVotes || {};
       });
 
     // Fetch from the divisions data table and update charts.
-    sql.execute("SELECT * FROM cartodb_query WHERE ward = {{ward}}", {'ward': ward})
+    sql.execute("SELECT * FROM dem_processed_divisions WHERE ward = '{{ward}}'", {'ward': ward})
       .done(function(data) {
         _ensureStatsShown();
 

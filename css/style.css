@@ -11,8 +11,8 @@ specific font stacks to ensure the greatest OS/browser compatibility.
 */
 html, button, input, select, textarea,
 .pure-g [class *= "pure-u"] {
-    /* Set your content font stack here: */
-    font-family: Helvetica, sans-serif;
+	/* Set your content font stack here: */
+	font-family: Helvetica, sans-serif;
 }
 
 table {
@@ -148,6 +148,25 @@ dd {
 
 #division-candidates-table-wrapper td li {
 	font-size: 0.75rem;
+}
+
+.top-bar-section label {
+	display: inline-block;
+	font-size: 0.8125rem;
+}
+
+nav.top-bar .top-bar-section label {
+	font-family: 'Montserrat', 'Tahoma', sans-serif;
+	text-transform: uppercase;
+	font-weight: 400;
+}
+
+@media only screen and (min-width: 40.0625em) {
+	.top-bar-section label {
+		background: #fff;
+		line-height: 2.1875rem;
+		padding: 0 1.09375rem;
+	}
 }
 
 

@@ -68,9 +68,9 @@ var BulletVotes = BulletVotes || {};
           var colorMap = {
             0: '#f7f7f7',
             1: ybinterp(0),
-            2: ybinterp(0.4),
-            3: ybinterp(0.5),
-            4: ybinterp(0.6),
+            2: '#353535',//ybinterp(0.4),
+            3: '#666',//ybinterp(0.5),
+            4: '#9299A5',//ybinterp(0.6),
             5: ybinterp(1)
           };
 
@@ -141,9 +141,9 @@ var BulletVotes = BulletVotes || {};
         colors: {
           '0 Chosen': '#f7f7f7',
           '1 Chosen': ybinterp(0),
-          '2 Chosen': ybinterp(0.4),
-          '3 Chosen': ybinterp(0.5),
-          '4 Chosen': ybinterp(0.6),
+          '2 Chosen': '#353535',//ybinterp(0.4),
+          '3 Chosen': '#666',//ybinterp(0.5),
+          '4 Chosen': '#9299A5',//ybinterp(0.6),
           '5 Chosen': ybinterp(1)
         }
       },

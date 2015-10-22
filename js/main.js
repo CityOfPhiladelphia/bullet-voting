@@ -43,18 +43,19 @@ var BulletVotes = BulletVotes || {};
   };
 
   var ybinterp = d3.interpolateRgb('#F2BA13', '#027EA4');
+  var grayinterp = d3.interpolateRgb('#353535', '#9299A5');
 
   // Populate the candiadate name colors that aren't explicitly set with values
   // between the alpha.phila.gov yellow and blue.
-  (function _fillInNameColors() {
+  NS._fillInNameColors = function() {
     var unsetNames = _(NS.bulletFieldNames).filter(function(fieldname) { return !NS.bulletFieldColors[fieldname]; })
     var factor = 0;
     var step = 1.0 / (unsetNames.length - 1);
     unsetNames.forEach(function(name) {
-      NS.bulletFieldColors[name] = ybinterp(factor);
+      NS.bulletFieldColors[name] = grayinterp(factor);
       factor += step;
     });
-  })();
+  };
 
   NS.initWardVotesChart = function() {
     NS.wardVotesChart = c3.generate({
@@ -569,6 +570,8 @@ function main() {
   if (!BulletVotes.divisionsTable) {
     throw "Configuration Error: No divisions table name has been set. Please set the BulletVotes.divisionsTable. Thanks!";
   }
+
+  BulletVotes._fillInNameColors();
 
   BulletVotes.createMap(
     function(vis, layers) {

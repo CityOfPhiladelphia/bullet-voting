@@ -539,9 +539,9 @@ var BulletVotes = BulletVotes || {};
     }
   };
 
-  NS.createMap = function(mapURL, callback) {
+  NS.createMap = function(callback) {
     // add link to CartoDB viz.json here
-    cartodb.createVis('map', mapURL, {
+    cartodb.createVis('map', BulletVotes.cartodbURL, {
         shareable: false ,
         title: false,
         description: false,
@@ -569,8 +569,11 @@ function canPushState() {
 }
 
 function main() {
+  if (!BulletVotes.cartodbURL) {
+    throw "Configuration Error: No cartodb URL has been set. Please set the BulletVotes.cartodbURL to the api URL for the map. Thanks!";
+  }
+
   BulletVotes.createMap(
-    'https://mjumbewu.cartodb.com/api/v2/viz/8d87c8c0-77b7-11e5-b56c-0e31c9be1b51/viz.json',
     function(vis, layers) {
 
     // layer 0 is the base layer, layer 1 is cartodb layer

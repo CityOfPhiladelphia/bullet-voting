@@ -576,6 +576,12 @@ function main() {
     // layer 0 is the base layer, layer 1 is cartodb layer
     // setInteraction is disabled by default
     layers[1].setInteraction(true);
+
+    // NOTE: In this case the cartodb layer has two sub layers. We want the
+    // first one (the district layer) to be interactive, but not the second
+    // (the ward layer).
+    layers[1].layers[1].sub.setInteraction(false);
+
     layers[1].on('featureClick', function(e, pos, latlng, data) {
       cartodb.log.log(e, pos, latlng, data);
       BulletVotes.goToWard(data.ward);

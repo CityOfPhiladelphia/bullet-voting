@@ -180,8 +180,11 @@ var BulletVotes = BulletVotes || {};
           title: function(x) {
             return 'Division ' + BulletVotes.divisionVotesChart.categories()[x];
           },
-          name: function(name, ratio, id, index) { return 'Chose ' + name[0] + ' candidate' + (name[0] != '1' ? 's' : ''); },
-          value: function(value, ratio, id, index) { return d3.format('%')(value); }
+          name: function(name, ratio, id, index) { return name[0] + ' candidate' + (name[0] != '1' ? 's' : ''); },
+          value: function(value, ratio, id, index) {
+            var div = BulletVotes.divisionVotesChart.categories()[index];
+            return d3.format('%')(value) + ' (' + BulletVotes._divisionVotesLabelMap['Div ' + div + ', ' + id] + ')';
+          }
         }
       },
       legend: {
@@ -281,8 +284,11 @@ var BulletVotes = BulletVotes || {};
     ]];
     var divisions = _(data.rows).pluck('division');
 
+    BulletVotes._divisionVotesLabelMap = {};
+
     data.rows.forEach(function(row) {
       // Get the total amount of bullet voting for each division
+      var div = row['division'];
       var rowTotal = 1 * (row['_0_votes'] || 0) +
                      1 * (row['_1_votes'] || 0) +
                      1 * (row['_2_votes'] || 0) +
@@ -302,6 +308,15 @@ var BulletVotes = BulletVotes || {};
         (row['_4_votes'] || 0) / rowTotal,
         (row['_5_votes'] || 0) / rowTotal,
       ]);
+
+      // Also build a maping for the tooltips, since at hover time, all C3 has
+      // access to is the percentages.
+      BulletVotes._divisionVotesLabelMap['Div ' + div + ', 0 Chosen'] = (row['_0_votes'] || 0) + ' votes';
+      BulletVotes._divisionVotesLabelMap['Div ' + div + ', 1 Chosen'] = (row['_1_votes'] || 0) + ' votes';
+      BulletVotes._divisionVotesLabelMap['Div ' + div + ', 2 Chosen'] = (row['_2_votes'] || 0) + ' votes';
+      BulletVotes._divisionVotesLabelMap['Div ' + div + ', 3 Chosen'] = (row['_3_votes'] || 0) + ' votes';
+      BulletVotes._divisionVotesLabelMap['Div ' + div + ', 4 Chosen'] = (row['_4_votes'] || 0) + ' votes';
+      BulletVotes._divisionVotesLabelMap['Div ' + div + ', 5 Chosen'] = (row['_5_votes'] || 0) + ' votes';
     });
 
     NS.divisionVotesChart.load({

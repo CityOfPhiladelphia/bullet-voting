@@ -412,14 +412,16 @@ var BulletVotes = BulletVotes || {};
       row.pairs = [];
 
       NS.bulletFieldNames.forEach(function(fieldname) {
-        if (row[fieldname]) {
-          row.bullets.push({label: NS.bulletFieldLabels[fieldname], count: row[fieldname]});
+        var votecount = row[fieldname] * 1;
+        if (votecount) {
+          row.bullets.push({label: NS.bulletFieldLabels[fieldname], count: votecount});
         }
       });
 
       NS.pairFieldNames.forEach(function(fieldname) {
-        if (row[fieldname]) {
-          row.pairs.push({label: NS.pairFieldLabels[fieldname], count: row[fieldname]});
+        var votecount = row[fieldname] * 1;
+        if (votecount) {
+          row.pairs.push({label: NS.pairFieldLabels[fieldname], count: votecount});
         }
       });
 

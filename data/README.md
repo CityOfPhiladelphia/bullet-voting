@@ -1,7 +1,9 @@
 ### Original Data
 
-* Democratic Bullet Voting.csv
-* Republican Bullet Voting.csv
+Data as tabulated by the Office of City Commissioner
+
+* [Democratic Bullet Voting.csv](Democratic Bullet Voting.csv)
+* [Republican Bullet Voting.csv](Republican Bullet Voting.csv)
 
 ### Geographic Base Data
 
@@ -10,14 +12,14 @@
 
 ### Processed Data (CSV)
 
-* dem_processed_wards.csv
-* dem_processed_divisions.csv
-* rep_processed_wards.csv
-* rep_processed_divisions.csv
+* [dem_processed_wards.csv](dem_processed_wards.csv)
+* [dem_processed_divisions.csv](dem_processed_divisions.csv)
+* [rep_processed_wards.csv](rep_processed_wards.csv)
+* [rep_processed_divisions.csv](rep_processed_divisions.csv)
 
 ### Processed Data (GeoJSON)
 The above CSV data joined with the geographic base data.
-* dem_processed_wards.geojson
-* dem_processed_divisions.geojson
-* rep_processed_wards.geojson
-* rep_processed_divisions.geojson
+* [dem_processed_wards.geojson](dem_processed_wards.geojson)
+* [dem_processed_divisions.geojson](dem_processed_divisions.geojson)
+* [rep_processed_wards.geojson](rep_processed_wards.geojson)
+* [rep_processed_divisions.geojson](rep_processed_divisions.geojson)

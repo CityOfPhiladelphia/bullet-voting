@@ -1,15 +1,31 @@
+# Bullet Voting in Philadelphia
+
+A visualization of the instances of bullet voting for at-large city council candidates in Philadelphia's 2015 primary elections.
+
+http://cityofphiladelphia.github.io/bullet-voting/
+
 ## Processing the spreadsheets
 
+The original data received for the visualization was compiled by hand in *data/Democratic Bullet Voting.csv* and *data/Republican Bullet Voting.csv*. To prepare the data for visualization, we use first the scripts *processwards.py* and *precessdivisions.py* to clean up the data and precalculate some useful values (NOTE: these scripts require Python 2.7 or above).
+
+To install the dependencies for these scripts, run:
+
 ```bash
-./processwards.py data/Democratic\ Bullet\ Voting\ \(FINAL\).xlsx\ -\ Division\ Results.csv data/dem_processed_wards.geojson > data/dem_processed_wards.csv
-./processdivisions.py data/Democratic\ Bullet\ Voting\ \(FINAL\).xlsx\ -\ Division\ Results.csv data/dem_processed_divisions.geojson > data/dem_processed_divisions.csv
-./processwards.py data/Republican\ Bullet\ Voting\ \(FINAL\).xlsx\ -\ Division\ Results.csv data/rep_processed_wards.geojson > data/rep_processed_wards.csv
-./processdivisions.py data/Republican\ Bullet\ Voting\ \(FINAL\).xlsx\ -\ Division\ Results.csv data/rep_processed_divisions.geojson > data/rep_processed_divisions.csv
+pip install -r requirements.txt
 ```
 
-Upload the processed data to a new dataset in CartoDB.
+Next, to actually process the data, we run:
 
-Change the following columns to number:
+```bash
+./processwards.py data/Democratic\ Bullet\ Voting.csv data/dem_processed_wards.geojson > data/dem_processed_wards.csv
+./processdivisions.py data/Democratic\ Bullet\ Voting.csv data/dem_processed_divisions.geojson > data/dem_processed_divisions.csv
+./processwards.py data/Republican\ Bullet\ Voting.csv data/rep_processed_wards.geojson > data/rep_processed_wards.csv
+./processdivisions.py data/Republican\ Bullet\ Voting.csv data/rep_processed_divisions.geojson > data/rep_processed_divisions.csv
+```
+
+## Visualizing the data
+
+Upload each of the the processed data GeoJSON files to a new dataset in CartoDB. Change the type of the following columns to number:
 * `_0_votes`
 * `_1_votes`
 * `_2_votes`
@@ -18,10 +34,7 @@ Change the following columns to number:
 * `_5_votes`
 * `top_bullet_votes`
 
-
-## Creating a new visualization
-
-Find the top bullet vote getters with:
+Create new maps for the district tables. To configure the map styles, first find the candidates that got the most bullet votes across the city with the following query:
 ```sql
 SELECT top_bullet, SUM(top_bullet_votes) AS total
 FROM <table>
@@ -29,11 +42,11 @@ GROUP BY top_bullet
 ORDER BY total DESC
 ```
 
-Paste in the *map_query.sql*.
+Use the query in *cartodb/map_query.sql* file as a starting point for the query for your map (replace `cartodb_query` with the name of your table).
 
 Create a chloropleth map on the `top_bullet_scale` field.
 
-Copy the CSS and update the *rep_* or *dem_division_map_style.css* file.
+Copy the CSS and update the *cartodb/rep_* or *cartodb/dem_division_map_style.css* file. Use this as your new map CSS.
 
 Publish the map and update the API URL in *main.js*
 

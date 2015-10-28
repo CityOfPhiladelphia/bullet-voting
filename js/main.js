@@ -180,6 +180,10 @@ var BulletVotes = BulletVotes || {};
           type: 'category'
         },
         y: {
+          label: {
+            text: 'Percentage of Voters',
+            position: 'outer-middle'
+          },
           tick: {
             format: d3.format('%')
           },

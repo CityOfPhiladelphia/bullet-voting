@@ -112,6 +112,19 @@ def process_csvs(incsvfilename, outjsonfilename):
                 row[0] = row[0].replace(' ', '')
                 ward, division = row[0].split('-')
 
+                # If this row is the start of a new ward, calculate the top
+                # bullets and pairs for the previous ward.
+                if currentward != ward:
+                    if currentward is not None:
+                        feature = finalizeward(currentward, wardrow, fieldnames,
+                                               bulletindex, doubleindex, writer,
+                                               wards, outfields)
+                        data['features'].append(feature)
+
+                    # Clear the wardrow for the next iteration.
+                    currentward = ward
+                    wardrow = None
+
                 # Ward 13 Division 14 in the original spreadsheet had a
                 # backslash (\) in the 0 Votes column.
                 row = [0 if v == '\\' else v for v in row]
@@ -127,19 +140,6 @@ def process_csvs(incsvfilename, outjsonfilename):
                         print('\nError while processing row {} -- {}: {}'.format(
                             row, type(e).__name__, e), file=sys.stderr)
                         sys.exit(1)
-
-                # After we've reached the last row in the ward, calculate the
-                # top bullets and pairs.
-                if currentward != ward:
-                    if currentward is not None:
-                        feature = finalizeward(currentward, wardrow, fieldnames,
-                                               bulletindex, doubleindex, writer,
-                                               wards, outfields)
-                        data['features'].append(feature)
-
-                    # Clear the wardrow for the next iteration.
-                    currentward = ward
-                    wardrow = None
 
             # Calculate the top bullets and pairs for the last ward.
             feature = finalizeward(currentward, wardrow, fieldnames,

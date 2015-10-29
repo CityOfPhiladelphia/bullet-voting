@@ -58,3 +58,18 @@
 #rep_processed_divisions [ top_bullet_scale <= 0.0434782608695652] {
    polygon-opacity: 0.3;
 }
+
+/* Show division labels at high enough zoom levels */
+#rep_processed_divisions::labels[zoom>13] {
+  text-name: [ward_division];
+  text-face-name: 'DejaVu Sans Book';
+  text-size: 9;
+  text-label-position-tolerance: 0;
+  text-fill: #000;
+  text-halo-fill: #FFF;
+  text-halo-radius: 1;
+  text-dy: 0;
+  text-allow-overlap: true;
+  text-placement: point;
+  text-placement-type: dummy;
+}

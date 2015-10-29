@@ -45,8 +45,8 @@ var BulletVotes = BulletVotes || {};
   var ybinterp = d3.interpolateRgb('#F2BA13', '#027EA4');
   var grayinterp = d3.interpolateRgb('#353535', '#9299A5');
 
-  // Populate the candiadate name colors that aren't explicitly set with values
-  // between the alpha.phila.gov yellow and blue.
+  // Populate the candiadate name colors that aren't explicitly set with shades
+  // of gray.
   NS._fillInNameColors = function() {
     NS.bulletFieldColors = NS.bulletFieldColors || {};
     var unsetNames = _(NS.bulletFieldNames).filter(function(fieldname) { return !NS.bulletFieldColors[fieldname]; })
@@ -57,6 +57,11 @@ var BulletVotes = BulletVotes || {};
       factor += step;
     });
   };
+  // It's tough to come up with an actual completely distinguishable palette
+  // for as many possibilities as there are pairs, so just sample from the
+  // edges of the color wheel. Sample in a random order, so that two pairs that
+  // occur juxtaposed in the donut chart have less chance of having similar
+  // assigned colors.
   NS._fillInPairColors = function() {
     NS.pairFieldColors = NS.pairFieldColors || {};
     var unsetNames = _(NS.pairFieldNames).filter(function(fieldname) { return !NS.pairFieldColors[fieldname]; })
@@ -78,12 +83,12 @@ var BulletVotes = BulletVotes || {};
         type: 'bar',
         color: function(color, d, undefined) {
           var colorMap = {
-            0: '#f7f7f7',
-            1: ybinterp(0),
-            2: '#353535',//ybinterp(0.4),
-            3: '#666',//ybinterp(0.5),
-            4: '#9299A5',//ybinterp(0.6),
-            5: ybinterp(1)
+            0: '#f7f7f7',    // super-duper light gray
+            1: ybinterp(0),  // yellow
+            2: '#353535',    // dark gray
+            3: '#666',       // medium gray
+            4: '#9299A5',    // light gray
+            5: ybinterp(1)   // blue
           };
 
           if (d.index !== undefined) { return colorMap[d.index]; }
@@ -151,12 +156,15 @@ var BulletVotes = BulletVotes || {};
           if (num1 > num2) { return 1; }
         },
         colors: {
-          '0 Chosen': '#f7f7f7',
-          '1 Chosen': ybinterp(0),
-          '2 Chosen': '#353535',//ybinterp(0.4),
-          '3 Chosen': '#666',//ybinterp(0.5),
-          '4 Chosen': '#9299A5',//ybinterp(0.6),
-          '5 Chosen': ybinterp(1)
+          // These colors match the
+          // 0-5 values on the ward
+          // votes chart.
+          '0 Chosen': '#f7f7f7',   // super-duper light gray
+          '1 Chosen': ybinterp(0), // yellow
+          '2 Chosen': '#353535',   // dark gray
+          '3 Chosen': '#666',      // medium gray
+          '4 Chosen': '#9299A5',   // light gray
+          '5 Chosen': ybinterp(1)  // blue
         }
       },
       bar: {

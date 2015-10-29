@@ -207,7 +207,7 @@ var BulletVotes = BulletVotes || {};
           name: function(name, ratio, id, index) { return name[0] + ' candidate' + (name[0] != '1' ? 's' : ''); },
           value: function(value, ratio, id, index) {
             var div = BulletVotes.divisionVotesChart.categories()[index];
-            return d3.format('%')(value) + ' (' + BulletVotes._divisionVotesLabelMap['Div ' + div + ', ' + id] + ')';
+            return d3.format('%')(value) + ' (' + BulletVotes._divisionVotesLabelMap[NS.divVotesKey(div, id[0])] + ')';
           }
         }
       },
@@ -336,18 +336,24 @@ var BulletVotes = BulletVotes || {};
 
       // Also build a maping for the tooltips, since at hover time, all C3 has
       // access to is the percentages.
-      BulletVotes._divisionVotesLabelMap['Div ' + div + ', 0 Chosen'] = (row['_0_votes'] || 0) + ' votes';
-      BulletVotes._divisionVotesLabelMap['Div ' + div + ', 1 Chosen'] = (row['_1_votes'] || 0) + ' votes';
-      BulletVotes._divisionVotesLabelMap['Div ' + div + ', 2 Chosen'] = (row['_2_votes'] || 0) + ' votes';
-      BulletVotes._divisionVotesLabelMap['Div ' + div + ', 3 Chosen'] = (row['_3_votes'] || 0) + ' votes';
-      BulletVotes._divisionVotesLabelMap['Div ' + div + ', 4 Chosen'] = (row['_4_votes'] || 0) + ' votes';
-      BulletVotes._divisionVotesLabelMap['Div ' + div + ', 5 Chosen'] = (row['_5_votes'] || 0) + ' votes';
+      BulletVotes._divisionVotesLabelMap[NS.divVotesKey(div, 0)] = (row['_0_votes'] || 0) + ' votes';
+      BulletVotes._divisionVotesLabelMap[NS.divVotesKey(div, 1)] = (row['_1_votes'] || 0) + ' votes';
+      BulletVotes._divisionVotesLabelMap[NS.divVotesKey(div, 2)] = (row['_2_votes'] || 0) + ' votes';
+      BulletVotes._divisionVotesLabelMap[NS.divVotesKey(div, 3)] = (row['_3_votes'] || 0) + ' votes';
+      BulletVotes._divisionVotesLabelMap[NS.divVotesKey(div, 4)] = (row['_4_votes'] || 0) + ' votes';
+      BulletVotes._divisionVotesLabelMap[NS.divVotesKey(div, 5)] = (row['_5_votes'] || 0) + ' votes';
     });
 
     NS.divisionVotesChart.load({
       rows: values,
       categories: divisions
     });
+  };
+
+  NS.divVotesKey = function(div, numcandidates) {
+    // Generate a key to identify a given division and number of candidates
+    // chosen.
+    return 'Div ' + div + ', ' + numcandidates + ' Chosen';
   };
 
   NS.updateWardBulletsLegend = function(highest, lowest) {

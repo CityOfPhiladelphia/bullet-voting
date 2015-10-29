@@ -191,6 +191,10 @@ nav.top-bar .top-bar-section label {
 	}
 }
 
+.cartodb-searchbox .text {
+	height: initial;
+}
+
 
 /* === SVG chart styles === */
 
